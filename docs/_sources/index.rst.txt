@@ -7,132 +7,81 @@ Welcome to KegMon - Keg Level Monitor
 -------------------------------------
 
 .. note::
-  Reflects version *v1.2.0*, Last updated 2025-12-29
+  Reflects version *v2.0.0*, Last updated 2026-01-25
 
 Introduction
 ============
 
-The software is tailored towards my personal needs and external services that I use, but suggestions are always 
-welcome. 
+KegMon is an open-source keg monitoring system designed for homebrewers to track beer levels, pours, and environmental conditions in real-time. The software is tailored to personal needs and integrates with popular services like Brewfather, BrewSpy, and Home Assistant. Suggestions for additional integrations are welcome—feel free to raise requests on GitHub.
 
-The software has two interfaces, displays and web-browser. Integrations with external services is available, 
-currently BrewFather, BrewSpy and Home Assistant. If you have requests for other services raise a request on github. 
+The system features two primary interfaces: a graphical TFT display on the device and a web-based interface accessible from any browser. It uses advanced filtering algorithms to compensate for the unpredictability of inexpensive load cells, ensuring stable and accurate readings.
 
-The cheap load cells are quite unpredicteble so it's hard to get a fully accurate and stable system. In order to 
-compensate for this I have built in the possibility to add filters and clean up the values, these filters include:
+To detect level changes, KegMon employs a dual-filter approach: a fast filter triggers the system into a "pouring" state upon initial weight changes, while slower filters validate the event by measuring the weight drop per second (slope). This helps distinguish genuine pours from minor fluctuations.
 
-* raw average (makes an average over the last 10 readings)
-* kalman (smooths out the peaks readings, but slows down level detection)
-* temperature adjustment (this is not yet active, but its possible to add a formula and adjust the weight, for instance compensate for temperature)
+The system can handle multiple consecutive pours by stabilizing readings and splitting volume based on configured glass sizes, provided the weight exceeds a single glass threshold. It's designed for up to 4 kegs but automatically detects the number of connected HX711 boards and can adapt to fewer. Future expansions may support up to 8 kegs.
 
-Here are two views on the data change over time, the temperature in my keezer is between 4 and 5 degress Celcius. My two 
-scales behave diffrently even though the load cells are from the same batch. I guess that the peak in the first 
-graph is due to interference from the compressor when it starts to cool. The orange line shows the stable level that 
-is used. Level change is triggered by a change up or down of more than the threasholds. In the image below the peak 
-is approx 16-20 cl above the stable level, so its not a big difference.  
+The v2.0.0 update is backward-compatible with scales from previous versions, requiring only a controller upgrade. The project includes:
 
-.. image:: images/temp_variation.png
-  :width: 400
-  :alt: Scale variation
+* Software for managing scales, processing readings, and providing interfaces.
+* Hardware designs using standard HX711 AD converters, load cells, and temperature sensors.
+* 3D models for keg bases and display enclosures.
 
-.. image:: images/temp_variation2.png
-  :width: 400
-  :alt: temp_variation
-
-Since the level will vary slightly based on the temperature (on my scale +0.04 to -0.01 kg), I have added a level detection algorithm
-that uses the average level over time and dont adjust unless the delta is larger than the defined threasholds (can be set in configuration).
-
-In order to trigger a level change then both the raw values and the kalman value needs to be aligned and the minium level change 
-must exceed 10 cl. This means that a pour needs to be more than this level. It can take up to 60 seconds for a new level to 
-be detected and a pour registered. This means that if you pour a number of glasses quickly, this will be detected as 
-one large pour. 
-
-The design is created for 2 kegs but it will work if you only use one (make sure to use the pins for scale 1 in that case). 
-
-The displays will show the name of the beer, abv and alternate between weight and pours. The first screen will display 
-values for keg 1 and the second for keg 2.
-
-The values presented on the displays is the raw values so that you can see directly if the level changes. Stable values can be screen
-at the web UI or via the external integrations.
-
-The software will automatically detect how many sensor boards are connected and if there is a temperature sensor. 
-
-The project contains the following parts:
-
-* Software that manage the scale and present the readings
-* Hardware design based on standard HX711 AD converter with load cells and temperature sensor
-* 3D models for the base
-* 3D models for display case
-
-Help wanted
-===========
-
-I have not had the possibility to test / validate all the options so any feedback and updates to the documentation is appreciated.
-
-Topics that need verification:
-
-* Using BME280 in a scale base to measure temperature
-* Using NAU7802 ADC to measure weight
-
-Hardware options
+Hardware Options
 ================
 
-Display 
+Board
+*****
+
+The current version exclusively supports the Lolin ESP32 S3 PRO board, which provides the dual-core processing needed for background tasks and advanced filtering. It includes an onboard SD card slot and connectors for the TFT display.
+
+.. image:: images/esp32s3_pro.jpg
+  :width: 600
+  :alt: ESP32 S3 PRO board
+
+Display
 *******
 
-For display there are two options that can be used:
+Two display options are supported:
 
-* OLED 0.96" display based on SH1106
-* LED display based on PCF8574, both 20x4 and 20x2 displays can be used. 
+* Lolin TFT 2.4" – A compact touchscreen for local interaction.
 
-The *OLED 0.96" display* is the option that is the primary option used in the design. 
+.. image:: images/tft_24.jpg
+  :width: 400
+  :alt: Lolin TFT 2.4" display
 
-There are larger OLED displays that could be used, but most of these dont have the option to 
-change I2C adress so this would require a different hardware design. 
+HX711
+*****
 
-ADC
-***
+For the ADC (HX711 board), the Purple or Red variants are recommended, as the project's PCB is designed for their pinout. Green boards have a different pinout and are not compatible.
 
-For ADC there are a few options available: 
+.. image:: images/hx711-options.png
+  :width: 800
+  :alt: HX711 boards
 
-* HX711 based boards (3 main options, green, purple and red boards)
-* NAU7802 requires a differnt hardware wiring. NAU782 uses I2C communication and for two scales an ESP32S2/S3 is required.
+Note: Inexpensive green HX711 boards cannot be used, as they do not support the 80 samples per second mode required for effective filtering.
 
-The *HX711 purple board* is the primary option used in the design. The green board has a different pin configuration. 
-
-Temperature sensor
+Temperature Sensor
 ******************
 
-For temperature sensor you can use:
+The system supports DS18B20 one-wire temperature sensors, with the ability to use one per scale base for precise monitoring of each keg's environment.
 
-* DS18B20, one wire sensor
-* DHT22, one wire sensor
-* BME280, i2c sensor. This option require a different wiring
+Credits
+=======
+Thanks to the following projects and libraries that made KegMon possible:
 
-The *DS18B20 temperature sensor* is the primary option.
-
-Credits to
-==========
-Thanks to the following projects.
-
-* https://github.com/mp-se/gravitymon
 * https://github.com/mp-se/espframework
-* https://github.com/graphitemaster/incbin
 * https://github.com/thijse/Arduino-Log
 * https://github.com/bblanchon/ArduinoJson
 * https://getbootstrap.com
-* https://jquery.com
 * https://chartjs.org
-* https://github.com/bogde/HX711
-* https://github.com/ThingPulse/esp8266-oled-ssd1306
 * https://modelviewer.dev/
-* https://github.com/RobTillaart/Statistic
-* https://github.com/denyssene/SimpleKalmanFilter
-*	https://github.com/mp-se/ESPAsyncWebServer
-*	https://github.com/mp-se/ESPAsyncTCP
-* https://github.com/adafruit/Adafruit_BME280_Library
-* https://github.com/enjoyneering/LiquidCrystal_I2C
-* https://github.com/sparkfun/SparkFun_Qwiic_Scale_NAU7802_Arduino_Library
+* https://github.com/pstolarz/OneWireNg
+* https://github.com/pstolarz/Arduino-Temperature-Control-Library
+* https://github.com/ESP32Async/ESPAsyncWebServer
+* https://github.com/ESP32Async/AsyncTCP
+* https://github.com/Bodmer/TFT_eSPI
+* https://github.com/RobTillaart/HX711
+* https://github.com/lvgl/lvgl
 
 .. toctree::
    :maxdepth: 2
@@ -141,9 +90,7 @@ Thanks to the following projects.
    
    functionality
    releases
-   intro
-   hardware
-   3dmodels
+   building
    installation
    configuration
    license

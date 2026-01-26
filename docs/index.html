@@ -1,15 +1,16 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en" data-content_root="">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Functionality" href="functionality.html" />
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Functionality" href="functionality.html" />
 
-    <meta name="generator" content="sphinx-4.3.2, furo 2022.01.02"/>
-        <title>KegMon v1.0.0</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=df49af52631e7917044a9c21a57f7b83170a6dd0" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=fade93df149f7c5fedb3ff897f799dc7d283b420" />
+    <!-- Generated with Sphinx 7.1.2 and Furo 2024.08.06 -->
+        <title>Kegmon 2.0.0</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
     
     
 
@@ -20,38 +21,38 @@
   --color-code-foreground: black;
   
   }
-  body[data-theme="dark"] {
-    --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  
-  }
-  @media (prefers-color-scheme: dark) {
-    body:not([data-theme="light"]) {
+  @media not print {
+    body[data-theme="dark"] {
       --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
   
     }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
   }
 </style></head>
   <body>
+    
     <script>
       document.body.dataset.theme = localStorage.getItem("theme") || "auto";
     </script>
     
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <path stroke="none" d="M0 0h24v24H0z" />
-      <line x1="4" y1="6" x2="20" y2="6" />
-      <line x1="10" y1="12" x2="20" y2="12" />
-      <line x1="6" y1="18" x2="20" y2="18" />
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
     </svg>
   </symbol>
   <symbol id="svg-menu" viewBox="0 0 24 24">
     <title>Menu</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
       <line x1="3" y1="12" x2="21" y2="12"></line>
       <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -60,15 +61,15 @@
   </symbol>
   <symbol id="svg-arrow-right" viewBox="0 0 24 24">
     <title>Expand</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
       <polyline points="9 18 15 12 9 6"></polyline>
     </svg>
   </symbol>
   <symbol id="svg-sun" viewBox="0 0 24 24">
     <title>Light mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
       <circle cx="12" cy="12" r="5"></circle>
       <line x1="12" y1="1" x2="12" y2="3"></line>
       <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -82,23 +83,64 @@
   </symbol>
   <symbol id="svg-moon" viewBox="0 0 24 24">
     <title>Dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
       <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
     </svg>
   </symbol>
-  <symbol id="svg-sun-half" viewBox="0 0 24 24">
-    <title>Auto light/dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M13 12h5" />
-      <path d="M13 15h4" />
-      <path d="M13 18h1" />
-      <path d="M13 9h4" />
-      <path d="M13 6h1" />
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
     </svg>
   </symbol>
 </svg>
@@ -112,6 +154,8 @@
   <div class="visually-hidden">Hide table of contents sidebar</div>
 </label>
 
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
 
 
 <div class="page">
@@ -123,13 +167,14 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="#"><div class="brand">KegMon v1.0.0</div></a>
+      <a href="#"><div class="brand">Kegmon 2.0.0</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
         <button class="theme-toggle">
           <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
           <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
@@ -143,16 +188,16 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><a class="sidebar-brand centered" href="#">
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="#">
   
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="_static/kegmon_logo.png" alt="Logo"/>
   </div>
   
-  <span class="sidebar-brand-text">KegMon v1.0.0</span>
+  <span class="sidebar-brand-text">Kegmon 2.0.0</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -161,11 +206,9 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="functionality.html">Functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
-<li class="toctree-l1"><a class="reference internal" href="intro.html">Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware</a></li>
-<li class="toctree-l1"><a class="reference internal" href="3dmodels.html">3D Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building a device</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Software Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="configuration.html">Software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">Licence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 <li class="toctree-l1"><a class="reference internal" href="q_and_a.html">Q &amp; A</a></li>
@@ -173,6 +216,7 @@
 
 </div>
 </div>
+
       </div>
       
     </div>
@@ -180,11 +224,20 @@
   <div class="main">
     <div class="content">
       <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
               <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
@@ -194,180 +247,98 @@
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
-        <article role="main">
-          <div class="section" id="welcome-to-kegmon-keg-level-monitor">
-<h1>Welcome to KegMon - Keg Level Monitor<a class="headerlink" href="#welcome-to-kegmon-keg-level-monitor" title="Permalink to this headline">¶</a></h1>
+        <article role="main" id="furo-main-content">
+          <section id="welcome-to-kegmon-keg-level-monitor">
+<h1>Welcome to KegMon - Keg Level Monitor<a class="headerlink" href="#welcome-to-kegmon-keg-level-monitor" title="Permalink to this heading">¶</a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Reflects version <em>v1.2.0</em>, Last updated 2025-12-29</p>
+<p>Reflects version <em>v2.0.0</em>, Last updated 2026-01-25</p>
 </div>
-<div class="section" id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>The software is tailored towards my personal needs and external services that I use, but suggestions are always
-welcome.</p>
-<p>The software has two interfaces, displays and web-browser. Integrations with external services is available,
-currently BrewFather, BrewSpy and Home Assistant. If you have requests for other services raise a request on github.</p>
-<p>The cheap load cells are quite unpredicteble so it’s hard to get a fully accurate and stable system. In order to
-compensate for this I have built in the possibility to add filters and clean up the values, these filters include:</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
+<p>KegMon is an open-source keg monitoring system designed for homebrewers to track beer levels, pours, and environmental conditions in real-time. The software is tailored to personal needs and integrates with popular services like Brewfather, BrewSpy, and Home Assistant. Suggestions for additional integrations are welcome—feel free to raise requests on GitHub.</p>
+<p>The system features two primary interfaces: a graphical TFT display on the device and a web-based interface accessible from any browser. It uses advanced filtering algorithms to compensate for the unpredictability of inexpensive load cells, ensuring stable and accurate readings.</p>
+<p>To detect level changes, KegMon employs a dual-filter approach: a fast filter triggers the system into a “pouring” state upon initial weight changes, while slower filters validate the event by measuring the weight drop per second (slope). This helps distinguish genuine pours from minor fluctuations.</p>
+<p>The system can handle multiple consecutive pours by stabilizing readings and splitting volume based on configured glass sizes, provided the weight exceeds a single glass threshold. It’s designed for up to 4 kegs but automatically detects the number of connected HX711 boards and can adapt to fewer. Future expansions may support up to 8 kegs.</p>
+<p>The v2.0.0 update is backward-compatible with scales from previous versions, requiring only a controller upgrade. The project includes:</p>
 <ul class="simple">
-<li><p>raw average (makes an average over the last 10 readings)</p></li>
-<li><p>kalman (smooths out the peaks readings, but slows down level detection)</p></li>
-<li><p>temperature adjustment (this is not yet active, but its possible to add a formula and adjust the weight, for instance compensate for temperature)</p></li>
+<li><p>Software for managing scales, processing readings, and providing interfaces.</p></li>
+<li><p>Hardware designs using standard HX711 AD converters, load cells, and temperature sensors.</p></li>
+<li><p>3D models for keg bases and display enclosures.</p></li>
 </ul>
-<p>Here are two views on the data change over time, the temperature in my keezer is between 4 and 5 degress Celcius. My two
-scales behave diffrently even though the load cells are from the same batch. I guess that the peak in the first
-graph is due to interference from the compressor when it starts to cool. The orange line shows the stable level that
-is used. Level change is triggered by a change up or down of more than the threasholds. In the image below the peak
-is approx 16-20 cl above the stable level, so its not a big difference.</p>
-<a class="reference internal image-reference" href="_images/temp_variation.png"><img alt="Scale variation" src="_images/temp_variation.png" style="width: 400px;"/></a>
-<a class="reference internal image-reference" href="_images/temp_variation2.png"><img alt="temp_variation" src="_images/temp_variation2.png" style="width: 400px;"/></a>
-<p>Since the level will vary slightly based on the temperature (on my scale +0.04 to -0.01 kg), I have added a level detection algorithm
-that uses the average level over time and dont adjust unless the delta is larger than the defined threasholds (can be set in configuration).</p>
-<p>In order to trigger a level change then both the raw values and the kalman value needs to be aligned and the minium level change
-must exceed 10 cl. This means that a pour needs to be more than this level. It can take up to 60 seconds for a new level to
-be detected and a pour registered. This means that if you pour a number of glasses quickly, this will be detected as
-one large pour.</p>
-<p>The design is created for 2 kegs but it will work if you only use one (make sure to use the pins for scale 1 in that case).</p>
-<p>The displays will show the name of the beer, abv and alternate between weight and pours. The first screen will display
-values for keg 1 and the second for keg 2.</p>
-<p>The values presented on the displays is the raw values so that you can see directly if the level changes. Stable values can be screen
-at the web UI or via the external integrations.</p>
-<p>The software will automatically detect how many sensor boards are connected and if there is a temperature sensor.</p>
-<p>The project contains the following parts:</p>
+</section>
+<section id="hardware-options">
+<h2>Hardware Options<a class="headerlink" href="#hardware-options" title="Permalink to this heading">¶</a></h2>
+<section id="board">
+<h3>Board<a class="headerlink" href="#board" title="Permalink to this heading">¶</a></h3>
+<p>The current version exclusively supports the Lolin ESP32 S3 PRO board, which provides the dual-core processing needed for background tasks and advanced filtering. It includes an onboard SD card slot and connectors for the TFT display.</p>
+<a class="reference internal image-reference" href="_images/esp32s3_pro.jpg"><img alt="ESP32 S3 PRO board" src="_images/esp32s3_pro.jpg" style="width: 600px;" /></a>
+</section>
+<section id="display">
+<h3>Display<a class="headerlink" href="#display" title="Permalink to this heading">¶</a></h3>
+<p>Two display options are supported:</p>
 <ul class="simple">
-<li><p>Software that manage the scale and present the readings</p></li>
-<li><p>Hardware design based on standard HX711 AD converter with load cells and temperature sensor</p></li>
-<li><p>3D models for the base</p></li>
-<li><p>3D models for display case</p></li>
+<li><p>Lolin TFT 2.4” – A compact touchscreen for local interaction.</p></li>
 </ul>
-</div>
-<div class="section" id="help-wanted">
-<h2>Help wanted<a class="headerlink" href="#help-wanted" title="Permalink to this headline">¶</a></h2>
-<p>I have not had the possibility to test / validate all the options so any feedback and updates to the documentation is appreciated.</p>
-<p>Topics that need verification:</p>
+<a class="reference internal image-reference" href="_images/tft_24.jpg"><img alt="Lolin TFT 2.4&quot; display" src="_images/tft_24.jpg" style="width: 400px;" /></a>
+</section>
+<section id="hx711">
+<h3>HX711<a class="headerlink" href="#hx711" title="Permalink to this heading">¶</a></h3>
+<p>For the ADC (HX711 board), the Purple or Red variants are recommended, as the project’s PCB is designed for their pinout. Green boards have a different pinout and are not compatible.</p>
+<a class="reference internal image-reference" href="_images/hx711-options.png"><img alt="HX711 boards" src="_images/hx711-options.png" style="width: 800px;" /></a>
+<p>Note: Inexpensive green HX711 boards cannot be used, as they do not support the 80 samples per second mode required for effective filtering.</p>
+</section>
+<section id="temperature-sensor">
+<h3>Temperature Sensor<a class="headerlink" href="#temperature-sensor" title="Permalink to this heading">¶</a></h3>
+<p>The system supports DS18B20 one-wire temperature sensors, with the ability to use one per scale base for precise monitoring of each keg’s environment.</p>
+</section>
+</section>
+<section id="credits">
+<h2>Credits<a class="headerlink" href="#credits" title="Permalink to this heading">¶</a></h2>
+<p>Thanks to the following projects and libraries that made KegMon possible:</p>
 <ul class="simple">
-<li><p>Using BME280 in a scale base to measure temperature</p></li>
-<li><p>Using NAU7802 ADC to measure weight</p></li>
-</ul>
-</div>
-<div class="section" id="hardware-options">
-<h2>Hardware options<a class="headerlink" href="#hardware-options" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="display">
-<h3>Display<a class="headerlink" href="#display" title="Permalink to this headline">¶</a></h3>
-<p>For display there are two options that can be used:</p>
-<ul class="simple">
-<li><p>OLED 0.96” display based on SH1106</p></li>
-<li><p>LED display based on PCF8574, both 20x4 and 20x2 displays can be used.</p></li>
-</ul>
-<p>The <em>OLED 0.96” display</em> is the option that is the primary option used in the design.</p>
-<p>There are larger OLED displays that could be used, but most of these dont have the option to
-change I2C adress so this would require a different hardware design.</p>
-</div>
-<div class="section" id="adc">
-<h3>ADC<a class="headerlink" href="#adc" title="Permalink to this headline">¶</a></h3>
-<p>For ADC there are a few options available:</p>
-<ul class="simple">
-<li><p>HX711 based boards (3 main options, green, purple and red boards)</p></li>
-<li><p>NAU7802 requires a differnt hardware wiring. NAU782 uses I2C communication and for two scales an ESP32S2/S3 is required.</p></li>
-</ul>
-<p>The <em>HX711 purple board</em> is the primary option used in the design. The green board has a different pin configuration.</p>
-</div>
-<div class="section" id="temperature-sensor">
-<h3>Temperature sensor<a class="headerlink" href="#temperature-sensor" title="Permalink to this headline">¶</a></h3>
-<p>For temperature sensor you can use:</p>
-<ul class="simple">
-<li><p>DS18B20, one wire sensor</p></li>
-<li><p>DHT22, one wire sensor</p></li>
-<li><p>BME280, i2c sensor. This option require a different wiring</p></li>
-</ul>
-<p>The <em>DS18B20 temperature sensor</em> is the primary option.</p>
-</div>
-</div>
-<div class="section" id="credits-to">
-<h2>Credits to<a class="headerlink" href="#credits-to" title="Permalink to this headline">¶</a></h2>
-<p>Thanks to the following projects.</p>
-<ul class="simple">
-<li><p><a class="reference external" href="https://github.com/mp-se/gravitymon">https://github.com/mp-se/gravitymon</a></p></li>
 <li><p><a class="reference external" href="https://github.com/mp-se/espframework">https://github.com/mp-se/espframework</a></p></li>
-<li><p><a class="reference external" href="https://github.com/graphitemaster/incbin">https://github.com/graphitemaster/incbin</a></p></li>
 <li><p><a class="reference external" href="https://github.com/thijse/Arduino-Log">https://github.com/thijse/Arduino-Log</a></p></li>
 <li><p><a class="reference external" href="https://github.com/bblanchon/ArduinoJson">https://github.com/bblanchon/ArduinoJson</a></p></li>
 <li><p><a class="reference external" href="https://getbootstrap.com">https://getbootstrap.com</a></p></li>
-<li><p><a class="reference external" href="https://jquery.com">https://jquery.com</a></p></li>
 <li><p><a class="reference external" href="https://chartjs.org">https://chartjs.org</a></p></li>
-<li><p><a class="reference external" href="https://github.com/bogde/HX711">https://github.com/bogde/HX711</a></p></li>
-<li><p><a class="reference external" href="https://github.com/ThingPulse/esp8266-oled-ssd1306">https://github.com/ThingPulse/esp8266-oled-ssd1306</a></p></li>
 <li><p><a class="reference external" href="https://modelviewer.dev/">https://modelviewer.dev/</a></p></li>
-<li><p><a class="reference external" href="https://github.com/RobTillaart/Statistic">https://github.com/RobTillaart/Statistic</a></p></li>
-<li><p><a class="reference external" href="https://github.com/denyssene/SimpleKalmanFilter">https://github.com/denyssene/SimpleKalmanFilter</a></p></li>
-<li><p><a class="reference external" href="https://github.com/mp-se/ESPAsyncWebServer">https://github.com/mp-se/ESPAsyncWebServer</a></p></li>
-<li><p><a class="reference external" href="https://github.com/mp-se/ESPAsyncTCP">https://github.com/mp-se/ESPAsyncTCP</a></p></li>
-<li><p><a class="reference external" href="https://github.com/adafruit/Adafruit_BME280_Library">https://github.com/adafruit/Adafruit_BME280_Library</a></p></li>
-<li><p><a class="reference external" href="https://github.com/enjoyneering/LiquidCrystal_I2C">https://github.com/enjoyneering/LiquidCrystal_I2C</a></p></li>
-<li><p><a class="reference external" href="https://github.com/sparkfun/SparkFun_Qwiic_Scale_NAU7802_Arduino_Library">https://github.com/sparkfun/SparkFun_Qwiic_Scale_NAU7802_Arduino_Library</a></p></li>
+<li><p><a class="reference external" href="https://github.com/pstolarz/OneWireNg">https://github.com/pstolarz/OneWireNg</a></p></li>
+<li><p><a class="reference external" href="https://github.com/pstolarz/Arduino-Temperature-Control-Library">https://github.com/pstolarz/Arduino-Temperature-Control-Library</a></p></li>
+<li><p><a class="reference external" href="https://github.com/ESP32Async/ESPAsyncWebServer">https://github.com/ESP32Async/ESPAsyncWebServer</a></p></li>
+<li><p><a class="reference external" href="https://github.com/ESP32Async/AsyncTCP">https://github.com/ESP32Async/AsyncTCP</a></p></li>
+<li><p><a class="reference external" href="https://github.com/Bodmer/TFT_eSPI">https://github.com/Bodmer/TFT_eSPI</a></p></li>
+<li><p><a class="reference external" href="https://github.com/RobTillaart/HX711">https://github.com/RobTillaart/HX711</a></p></li>
+<li><p><a class="reference external" href="https://github.com/lvgl/lvgl">https://github.com/lvgl/lvgl</a></p></li>
 </ul>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="functionality.html">Functionality</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="functionality.html#the-main-features">The main features</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="functionality.html">Functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="releases.html#v1-2-0">v1.2.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="releases.html#v1-1-0">v1.1.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="releases.html#v1-0-0">v1.0.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="releases.html#v0-9-0">v0.9.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="releases.html#v0-8-0">v0.8.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="releases.html#v0-7-1">v0.7.1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="releases.html#v0-7-0">v0.7.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="releases.html#v0-6-0">v0.6.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="releases.html#v0-5-0">v0.5.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="releases.html#v0-4-0">v0.4.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="releases.html#v2-0-0">v2.0.0</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="intro.html">Getting started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="intro.html#step-1-build-the-scale-bases">Step 1 - Build the scale bases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="intro.html#step-2-build-the-case">Step 2 - Build the case</a></li>
-<li class="toctree-l2"><a class="reference internal" href="intro.html#step-3-flash-the-device">Step 3 - Flash the device</a></li>
-<li class="toctree-l2"><a class="reference internal" href="intro.html#step-4-setup-wifi">Step 4 - Setup WIFI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="intro.html#step-5-configuration">Step 5 - Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="intro.html#step-4-completed">Step 4 - Completed</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="hardware.html#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hardware.html#hx711">HX711</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hardware.html#nau7802">NAU7802</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hardware.html#schema-for-hx711">Schema for HX711</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hardware.html#schema-for-nau7802">Schema for NAU7802</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hardware.html#case">Case</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hardware.html#scale-base">Scale Base</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="3dmodels.html">3D Models</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="3dmodels.html#base">Base</a></li>
-<li class="toctree-l2"><a class="reference internal" href="3dmodels.html#cover">Cover</a></li>
-<li class="toctree-l2"><a class="reference internal" href="3dmodels.html#case">Case</a></li>
-<li class="toctree-l2"><a class="reference internal" href="3dmodels.html#case-top">Case Top</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building a device</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="building.html#step-1-build-the-scale-bases">Step 1 - Build the scale bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="building.html#step-2-build-the-controller">Step 2 - Build the controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="building.html#step-3-flash-the-device">Step 3 - Flash the device</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Software Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#checklist-for-configuring-the-device">Checklist for configuring the device</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#brewflasher">Brewflasher</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#updating-firmware">Updating firmware</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#gravitymon-web-flasher">GravityMon Web Flasher</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation.html#serial-monitoring">Serial Monitoring</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#configuring-wifi">Configuring WIFI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#finding-the-device-adress">Finding the device adress</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#wifi-compatibility">WiFi Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#configuring-wifi">Configuring WiFi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#finding-the-device-address">Finding the Device Address</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="configuration.html">Software</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#index">Index</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#device-settings">Device - Settings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configuration.html#device-hardware">Device - Hardware</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#device-calibration">Device - Calibration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#device-stability">Device - Stability</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configuration.html#device-wifi">Device - Wifi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#device-wifi">Device - WiFi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#taps-settings">Taps - Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#taps-beers">Taps - Beers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#taps-history">Taps - History</a></li>
@@ -376,32 +347,33 @@ change I2C adress so this would require a different hardware design.</p>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#integration-brewspy">Integration - Brewspy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#integration-barhelper">Integration - Barhelper</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#integration-influx">Integration - Influx</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configuration.html#serial-console">Serial console</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#serial-console">Serial Console</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#backup-recovery">Backup &amp; Recovery</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configuration.html#firmware-update">Firmware update</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#firmware-update">Firmware Update</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#support">Support</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#tools">Tools</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">Licence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="development.html#future">Future</a></li>
-<li class="toctree-l2"><a class="reference internal" href="development.html#links">Links</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#contributing-to-kegmon">Contributing to KegMon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#required-tools">Required Tools</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="q_and_a.html">Q &amp; A</a></li>
 </ul>
 </div>
-</div>
-<div class="section" id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
-</div>
-</div>
+</section>
+</section>
 
         </article>
       </div>
@@ -415,15 +387,23 @@ change I2C adress so this would require a different hardware design.</p>
                 </div>
                 <div class="title">Functionality</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           
         </div>
-
-        <div class="related-information">
-              Copyright &#169; 2022-2024, Magnus Persson |
-          Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
-          <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022-2026, Magnus Persson
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
         </div>
         
       </footer>
@@ -434,7 +414,7 @@ change I2C adress so this would require a different hardware design.</p>
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">
@@ -442,14 +422,14 @@ change I2C adress so this would require a different hardware design.</p>
             <ul>
 <li><a class="reference internal" href="#">Welcome to KegMon - Keg Level Monitor</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
-<li><a class="reference internal" href="#help-wanted">Help wanted</a></li>
-<li><a class="reference internal" href="#hardware-options">Hardware options</a><ul>
+<li><a class="reference internal" href="#hardware-options">Hardware Options</a><ul>
+<li><a class="reference internal" href="#board">Board</a></li>
 <li><a class="reference internal" href="#display">Display</a></li>
-<li><a class="reference internal" href="#adc">ADC</a></li>
-<li><a class="reference internal" href="#temperature-sensor">Temperature sensor</a></li>
+<li><a class="reference internal" href="#hx711">HX711</a></li>
+<li><a class="reference internal" href="#temperature-sensor">Temperature Sensor</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#credits-to">Credits to</a></li>
+<li><a class="reference internal" href="#credits">Credits</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 </li>
@@ -462,12 +442,11 @@ change I2C adress so this would require a different hardware design.</p>
       
     </aside>
   </div>
-</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/scripts/furo.js"></script>
-    <script src="_static/clipboard.min.js"></script>
-    <script src="_static/copybutton.js"></script>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=73cda6fb"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
     </body>
 </html>

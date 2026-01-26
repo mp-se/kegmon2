@@ -1,266 +1,214 @@
-.. _software:
+.. _configuration:
 
-Software
---------
+Configuration
+-------------
+
+This guide explains how to configure KegMon through its web interface. Access the device via a web browser using its IP address or mDNS name (e.g., kegmon.local). The interface is divided into sections for device settings, taps, integrations, and tools.
 
 Index
 *****
 
-This is the web page accessed by accessing the device via a web-browser. This section will show the general device information.
+The main dashboard displays general device information, including temperatures and status. Only available data is shown.
 
-.. image:: images/view_home.png
+.. image:: images/ui_home.png
   :width: 600
-  :alt: Index
-
-Shows information about the device and temperatures, only data available will be shown.
+  :alt: Index page
 
 Device - Settings
 *****************
 
-.. image:: images/view_device_settings.png
+Configure general device preferences here.
+
+.. image:: images/ui_device_settings.png
   :width: 600
   :alt: Device Settings
 
-* **Device name**: Set the name of the device on the network, your network needs to support mDNS.
-
-* **Temperature format**: Select format for temperatures
-
-* **Weight unit**: Select format for weights
-
-* **Volume unit**: Select format for volumes
-
-* **Dark Mode**: Switches the UI between light and dark mode. You can also use the toggle on the menubar for that.
-
-Device - Hardware
-*****************
-
-.. image:: images/view_device_hardware.png
-  :width: 600
-  :alt: Device Hardware
-
-* **Display layout**: Choose the layout/information on the displays.
-
-* **Display driver**: Choose the what display driver is used, either LCD 20x4 or OLED 0.96". Default is OLED 0.96".
-
-* **Temp sensor**: Choose the what temp sensor is used, either DHT22, BME280, DS18B20 or remote BrewPI-ESP installation. Default is DS18B20. *Wiring for BME280 is different*.
-
-* **Scale sensor**: Choose the what ADC is used, HX711 or NAU7802. Default is HX711. *Wiring for NAU7802 is different*.
-
-* **BrewPI ESP URL**: Base URL for the brewpi-esp to fetch temperature from. Require v15 or later. 
-
-* **Pins**: If you dont follow the standard hardware wiring then you can customize the pins here.
+* **MDNS**: Set a custom name for the device on the network (requires mDNS support).
+* **Temperature format**: Choose Celsius or Fahrenheit for temperature display.
+* **Weight unit**: Select kg or lbs for weight measurements.
+* **Volume unit**: Choose cl, UK fl. oz, or US fl. oz for volume display.
+* **Dark Mode**: Toggle between light and dark UI themes (also available via the menu bar).
 
 Device - Calibration
-*********************
+********************
 
-.. image:: images/view_device_calibration.png
+Calibrate your scales in three easy steps for accurate weight measurements.
+
+.. image:: images/ui_device_calibration.png
   :width: 600
   :alt: Device calibration
 
-* **STEP 1 - Tare scale**
-
-The first step is to tare the scale. First select the scale from the dropdown list that you 
-want to operate on. Make sure the scale is empty.
-
-* **STEP 2 - Calculate factor**
-
-The second step is to calculate the factor used to calculate the weight. Place a thing with a 
-known weight on the scale and enter the weight of that object. The software will then calculate
-the factor for estimating the weight. 
-
-* **STEP 3 - Validate**
-
-The third step is to validate that everything works, place anohter thing with a know weight and 
-check the measured value. If you are satisfied then you are done.
+* **STEP 1 - Tare scale**: Select the scale from the dropdown and ensure it's empty, then tare to zero.
+* **STEP 2 - Calculate factor**: Place an object of known weight on the scale and enter its weight. The software calculates the calibration factor.
+* **STEP 3 - Validate**: Place another object of known weight and verify the reading. If accurate, calibration is complete.
 
 Device - Stability
 ******************
 
-.. image:: images/view_device_stability.png
+Monitor the stability of your hardware setup to ensure reliable readings.
+
+.. image:: images/ui_device_stats.png
   :width: 600
-  :alt: Serial console
+  :alt: Statistics
 
-Information page that can determine the stability of your hardware build.
+This page helps diagnose unstable builds. Keep the browser open to view historical data (raw, Kalman-filtered, and stable values) for analysis. Data is stored in the browser and resets on refresh.
 
-I have found that some of my hardware builds was not really stable so I added this 
-feature to check the scale build before doing the final assembly. 
-
-If you keep the browser open you can also see the history of the values (raw, kalman & stable). This can help to show
-how your scale varies over time. Data is only stored in the browser so any refresh or page change will delete the graphs.
-
-Device - Wifi
+Device - WiFi
 *************
 
-.. image:: images/view_device_wifi.png
+Manage WiFi connections and settings.
+
+.. image:: images/ui_device_wifi.png
   :width: 600
-  :alt: Device wifi
+  :alt: Device WiFi
 
-* **SSID #1:**
-
-  Select the desired primary SSID to use. 
-
-* **Password #1:**
-
-  Enter the primary password. 
-
-* **SSID #2:**
-
-  Select the desired secondary SSID to use (optional). 
-
-* **Password #2:**
-
-  Enter the secondary password (optional). 
-
-* **Portal timeout:**
-
-  If the wifi portal is triggered (can be triggered by tapping the reset button 2-3 times within 3 seconds) then this is the amount of time allowed before it exists again.
-
-* **Connect timeout:**
-
-  This is the amount of time allowed for a wifi connect. 
+* **SSID #1/Password #1**: Primary network credentials.
+* **SSID #2/Password #2**: Secondary network for fallback (optional).
+* **Portal timeout**: Time (in seconds) the WiFi portal remains active when triggered (e.g., by tapping reset 2-3 times within 3 seconds).
+* **Connect timeout**: Maximum time allowed for WiFi connection attempts.
 
 Taps - Settings
 ***************
 
-.. image:: images/view_taps_settings.png
+Configure individual tap settings for volume calculations and beer details.
+
+.. image:: images/ui_taps_settings.png
   :width: 600
   :alt: Tap settings
 
-* **Empty keg weight**: Weight of the empty keg, used to determine how much beer is in the keg.
-
-* **Glass volume**: Choose the volume of the beer glasses, used to determine how many pours are left. 
-
-* **Beer name**, **Beer ABV**, **Beer EBC**, **Beer IBU**: Information about the beer, used to show on user interfaces.
-
-* **Beer FG**: Used in formula for calculating the beer volume. FG has a slight impact on the weight / volume unit. If not defined 1 will be used for calculations.
+* **Empty keg weight**: Weight of the empty keg, used to calculate remaining beer volume.
+* **Glass volume**: Standard glass size for estimating remaining pours.
+* **Keg volume**: Standard keg size for validating weight and calculating remaining volume.
+* **Temperature sensor**: Connect a temperature sensor to the specific scale base. If not used the first sensor value will be used.
 
 Taps - Beers
 ************
 
-.. image:: images/view_taps_beers.png
+View and manage beers on tap, with options to import from integrations.
+
+.. image:: images/ui_taps_beer.png
   :width: 600
   :alt: Tap beers
 
-Shows information about beers on tap. Use the buttons to import from brewspy or brewfather.
+Use buttons to import data from BrewSpy or Brewfather. Beer name, FG, EBC, ABV and IBU are imported if available
 
 Taps - History
 **************
 
-.. image:: images/view_taps_history.png
+Review recent pour history for each tap.
+
+.. image:: images/ui_taps_history.png
   :width: 600
   :alt: Tap history
 
-Shows information about the latest pours per tapbeers on tap.
-
+Displays the latest pours for beers on tap.
 
 Integration - Home Assistant
 ****************************
 
-.. image:: images/view_integration_ha.png
+Set up MQTT for Home Assistant integration.
+
+.. image:: images/ui_post_ha.png
   :width: 600
   :alt: Home Assistant integration
 
-Setting for MQTT server that is used by Home Assistant.
+Configure MQTT server details for data export to Home Assistant.
 
 Integration - Brewfather
 ************************
 
-.. image:: images/view_integration_brewfather.png
+Connect to Brewfather for brew data import.
+
+.. image:: images/ui_post_brewfather.png
   :width: 600
-  :alt: Brewfather
+  :alt: Brewfather integration
 
-API and User keys for access to brewfather
-
+Enter API and user keys for Brewfather access.
 
 Integration - Brewspy
 *********************
 
-.. image:: images/view_integration_brewspy.png
+Link to BrewSpy for keg and beer data.
+
+.. image:: images/ui_post_brewspy.png
   :width: 600
   :alt: Brewspy integration
 
-Brewspy tokens for keg 1 & keg 2. 
-
-Click on the taplist and the tap you want to connect. Under webhook URL copy the 
-last code and enter that into kegmon.
-
-.. note::
-  This will not work on ESP8266 due to lack of RAM for using SSL connections.
-
+Enter tokens for kegs. Copy the webhook URL code from BrewSpy and paste it here.
 
 Integration - Barhelper
 ***********************
 
-.. image:: images/view_integration_barhelper.png
+Integrate with Barhelper for additional monitoring.
+
+.. image:: images/ui_post_barhelper.png
   :width: 600
   :alt: Barhelper integration
 
-Barhelper API keys and name of monitors.
-
-You can get the API key from the settings part of Barhelper and enter this into 
-kegmon. Make a copy of it since you will not be able to retrieve it again. 
-
-The name of the monitors does not need to be registered, they will be added 
-after the first run. Just connect the tap/keg to the monitor and the level will 
-be the same as in kegmon.
-
-.. note::
-  On ESP8266 the device will use a NON-SSL endpoint to send the data since there is 
-  not enough memory.
-
+Enter API keys and monitor names. Obtain the key from Barhelper settings (save it securely, as it's not retrievable later). Monitors are added automatically on first run.
 
 Integration - Influx
 ********************
 
-.. image:: images/view_integration_influx.png
+Send data to InfluxDB for analysis.
+
+.. image:: images/ui_post_influxdb.png
   :width: 600
   :alt: Influx integration
 
-Sends scale and internal parameters to an influx db v2 for debugging and detailed analysis.
+Configure InfluxDB v2 for logging scale and internal parameters. If enabled data will be logged every second for all the scales and paramaters. 
 
-
-Serial console
+Serial Console
 **************
 
-.. image:: images/view_other_serial.png
+Access device logs for troubleshooting.
+
+.. image:: images/ui_other_serial.png
   :width: 600
   :alt: Serial console
 
-Here you can view the serial output from the device for troubleshooting
+View real-time serial output from the device.
 
 Backup & Recovery
 *****************
 
-.. image:: images/view_other_backup.png
+Manage configuration backups.
+
+.. image:: images/ui_other_backup.png
   :width: 600
   :alt: Backup configuration
 
-Backup your configuration or restore it from a previous state
+Export current settings or restore from a saved JSON file.
 
-Firmware update
+Firmware Update
 ***************
 
-.. image:: images/view_other_firmware.png
+Update device firmware over-the-air.
+
+.. image:: images/ui_other_firmware.png
   :width: 600
   :alt: Upload firmware
 
-Here you can upload a new firmware version without the need to hook the device to a serial port 
-on your computer.
+Upload new firmware files without serial connection.
 
 Support
 *******
 
-.. image:: images/view_other_support.png
+Access diagnostic information.
+
+.. image:: images/ui_other_support.png
   :width: 600
   :alt: Support information
 
-View logs or check the hardware configuration
+View logs and hardware details.
 
 Tools
 *****
 
-.. image:: images/view_other_tools.png
+Interact with the device's file system.
+
+.. image:: images/ui_other_tools.png
   :width: 600
   :alt: Tools
 
-Interact with the file system on the device
+Manage files on the device.
