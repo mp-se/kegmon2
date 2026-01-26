@@ -1,0 +1,78 @@
+/*
+MIT License
+
+Copyright (c) 2021-2026 Magnus
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+ */
+#ifndef SRC_TEMP_MGR_HPP_
+#define SRC_TEMP_MGR_HPP_
+#include <memory>
+#include <temp_base.hpp>
+#include <utils.hpp>
+
+class TempSensorManager {
+ private:
+  std::unique_ptr<TempSensorBase> _sensor;
+  float _lastTemperature[5] = {NAN, NAN, NAN, NAN,
+                               NAN};  // Support for scale bases + one extra
+
+ public:
+  TempSensorManager() {}
+  ~TempSensorManager();
+  TempSensorManager(const TempSensorManager&);
+  TempSensorManager& operator=(const TempSensorManager&);
+
+  void setup();
+  void read();
+
+  bool hasTemp(int index) const {
+    if (index < 0 || index >= 5) return false;
+    return !isnan(_lastTemperature[index]);
+  }
+  bool hasSensor() const { return _sensor.get()->hasSensor(); }
+  int getSensorCount() const { return _sensor.get()->getSensorCount(); }
+
+  String getSensorId(int index) const {
+    if (index < 0 || index >= getSensorCount()) return "";
+    return _sensor.get()->getSensorId(index);
+  }
+
+  float getLastTempC(int index) const {
+    if (index < 0 || index > getSensorCount()) return NAN;
+    return _lastTemperature[index];
+  }
+
+  float getLastTempByIdC(const char* sensorId) const {
+    if (!sensorId) return NAN;
+    for (int i = 0; i < getSensorCount(); i++) {
+      String id = getSensorId(i);
+      if (id == sensorId) {
+        return _lastTemperature[i];
+      }
+    }
+    return _lastTemperature[0];  // Default to first sensor if not found
+  }
+};
+
+extern TempSensorManager myTemp;
+
+#endif  // SRC_TEMP_MGR_HPP_
+
+// EOF
