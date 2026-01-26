@@ -26,7 +26,7 @@ jobs:
       - name: PlatformIO Run
         uses: karniv00l/platformio-run-action@v1
         with:
-          environments: "kegmon-esp32s3-pro"
+          environments: "kegmon-esp32s3-pro-tft-sd"
           jobs: 6
           silent: false
           verbose: true
