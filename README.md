@@ -15,7 +15,7 @@
 
 This is a project that I have done for my own Keezer, if you like it please feel free to suggest improvements. 
 
-For docs see: https://mp-se.github.io/kegmon/index.html
+For docs see: https://mp-se.github.io/kegmon2/index.html
 
 # Hardware
 
