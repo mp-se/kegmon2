@@ -58,3 +58,56 @@ html_static_path = ['_static']
 
 html_show_sourcelink = False
 html_show_sphinx = True
+
+# -- Custom 3D Model Conversion ----------------------------------------------
+import os
+from sphinx.util import logging
+
+logger = logging.getLogger(__name__)
+
+def convert_3d_models(app):
+    """
+    Automatically converts STL files in source/3d/ to GLB in source/_static/3d/
+    during the Sphinx build process.
+    """
+    try:
+        import trimesh
+    except ImportError:
+        logger.warning("trimesh library not found; skipping STL to GLB conversion. "
+                       "Install it via 'pip install trimesh numpy'.")
+        return
+
+    # Paths relative to the source directory
+    source_dir = os.path.join(app.srcdir, '3d')
+    target_dir = os.path.join(app.srcdir, '_static', '3d')
+
+    if not os.path.exists(source_dir):
+        logger.info(f"3D source directory not found: {source_dir}")
+        return
+
+    os.makedirs(target_dir, exist_ok=True)
+
+    for filename in os.listdir(source_dir):
+        if filename.lower().endswith('.stl'):
+            stl_path = os.path.join(source_dir, filename)
+            glb_path = os.path.join(target_dir, os.path.splitext(filename)[0] + '.glb')
+            static_stl_path = os.path.join(target_dir, filename)
+
+            # Copy STL to static if it doesn't exist or is older
+            if not os.path.exists(static_stl_path) or os.path.getmtime(stl_path) > os.path.getmtime(static_stl_path):
+                import shutil
+                shutil.copy2(stl_path, static_stl_path)
+
+            # Only convert if GLB is missing or STL is newer
+            if not os.path.exists(glb_path) or os.path.getmtime(stl_path) > os.path.getmtime(glb_path):
+                logger.info(f"Converting 3D model: {filename} -> {os.path.basename(glb_path)}")
+                try:
+                    mesh = trimesh.load(stl_path)
+                    # Export as GLB
+                    mesh.export(glb_path)
+                except Exception as e:
+                    logger.error(f"Failed to convert {filename}: {e}")
+
+def setup(app):
+    # Connect the conversion function to the 'builder-inited' event
+    app.connect('builder-inited', convert_3d_models)
