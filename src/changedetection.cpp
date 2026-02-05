@@ -594,6 +594,7 @@ void ChangeDetection::update(UnitIndex idx, const ScaleReadingResult& result,
 
   // CALIBRATION CHECK: Use scaleFactor == 0.0f (FACTOR_UNCALIBRATED) to
   // identify uncalibrated scales
+  // PRIORITY: HIGHEST - Cannot process readings without calibration
   if (myConfig.getScaleFactor(idx) == 0.0f) {
     // Scale has not been calibrated yet (scaleFactor is sentinel value 0.0f)
     // Transition to CalibrationNeeded and skip state machine processing
@@ -605,6 +606,15 @@ void ChangeDetection::update(UnitIndex idx, const ScaleReadingResult& result,
     return;  // Skip normal state machine until calibration is complete
   }
 
+  // SIGNAL QUALITY CHECK: Monitor sensor health
+  // PRIORITY: HIGH - Check signal quality if calibrated
+  if (scale.signalQualityPercent < 20 || scale.consecutiveErrors >= 10) {
+    if (scale.state != ChangeDetectionState::LoadCellError) {
+      transitionState(idx, ChangeDetectionState::LoadCellError, timestampMs);
+      // Event is already fired by updateSignalQuality() on first error
+    }
+  }
+
   // Update state machine
   uint64_t timeInState = timestampMs - scale.stateEntryTimeMs;
 
@@ -614,6 +624,8 @@ void ChangeDetection::update(UnitIndex idx, const ScaleReadingResult& result,
         transitionState(idx, ChangeDetectionState::InvalidWeight, timestampMs);
         fireInvalidWeightEvent(idx, currentWeight, timestampMs);
       } else if (isWeightAbsent(currentWeight)) {
+        scale.previousWeight = 0.0f;
+        scale.stableWeight = currentWeight;
         transitionState(idx, ChangeDetectionState::KegAbsent, timestampMs);
         fireEvent(idx, ChangeDetectionEventType::KEG_REMOVED, timestampMs);
       } else {
@@ -628,6 +640,7 @@ void ChangeDetection::update(UnitIndex idx, const ScaleReadingResult& result,
         fireInvalidWeightEvent(idx, currentWeight, timestampMs);
       } else if (isWeightAbsent(currentWeight)) {
         scale.previousWeight = scale.stableWeight;
+        scale.stableWeight = currentWeight;
         transitionState(idx, ChangeDetectionState::KegAbsent, timestampMs);
         fireEvent(idx, ChangeDetectionEventType::KEG_REMOVED, timestampMs);
       } else {
@@ -682,6 +695,7 @@ void ChangeDetection::update(UnitIndex idx, const ScaleReadingResult& result,
         fireInvalidWeightEvent(idx, currentWeight, timestampMs);
       } else if (isWeightAbsent(currentWeight)) {
         scale.previousWeight = scale.stableWeight;
+        scale.stableWeight = currentWeight;
         transitionState(idx, ChangeDetectionState::KegAbsent, timestampMs);
         fireEvent(idx, ChangeDetectionEventType::KEG_REMOVED, timestampMs);
       } else if (currentWeight >=
@@ -763,6 +777,7 @@ void ChangeDetection::update(UnitIndex idx, const ScaleReadingResult& result,
         fireInvalidWeightEvent(idx, currentWeight, timestampMs);
       } else if (isWeightAbsent(currentWeight)) {
         scale.previousWeight = scale.stableWeight;
+        scale.stableWeight = currentWeight;
         transitionState(idx, ChangeDetectionState::KegAbsent, timestampMs);
         fireEvent(idx, ChangeDetectionEventType::KEG_REMOVED, timestampMs);
       } else {
@@ -841,6 +856,8 @@ void ChangeDetection::update(UnitIndex idx, const ScaleReadingResult& result,
                 scale.prePourWeight = 0.0f;  // Clear pour tracking
               } else {
                 // Keg removed during pour
+                scale.previousWeight = scale.stableWeight;
+                scale.stableWeight = currentWeight;
                 transitionState(idx, ChangeDetectionState::KegAbsent, timestampMs);
                 fireEvent(idx, ChangeDetectionEventType::KEG_REMOVED, timestampMs);
                 scale.prePourWeight = 0.0f;  // Clear pour tracking
@@ -867,6 +884,8 @@ void ChangeDetection::update(UnitIndex idx, const ScaleReadingResult& result,
             scale.prePourWeight = 0.0f;  // Clear pour tracking
           } else {
             // Keg removed during pour
+            scale.previousWeight = scale.stableWeight;
+            scale.stableWeight = currentWeight;
             transitionState(idx, ChangeDetectionState::KegAbsent, timestampMs);
             fireEvent(idx, ChangeDetectionEventType::KEG_REMOVED, timestampMs);
             scale.prePourWeight = 0.0f;  // Clear pour tracking
@@ -903,6 +922,7 @@ void ChangeDetection::update(UnitIndex idx, const ScaleReadingResult& result,
     case ChangeDetectionState::ReplacingKeg: {
       if (isWeightAbsent(currentWeight)) {
         scale.previousWeight = scale.stableWeight;
+        scale.stableWeight = currentWeight;
         transitionState(idx, ChangeDetectionState::KegAbsent, timestampMs);
         fireEvent(idx, ChangeDetectionEventType::KEG_REMOVED, timestampMs);
       } else if (isWithinStabilityWindow(currentWeight, scale.stableWeight)) {
@@ -935,6 +955,18 @@ void ChangeDetection::update(UnitIndex idx, const ScaleReadingResult& result,
       if (myConfig.getScaleFactor(idx) != 0.0f) {
         transitionState(idx, ChangeDetectionState::Idle, timestampMs);
         fireEvent(idx, ChangeDetectionEventType::CALIBRATION_COMPLETE, timestampMs);
+      }
+      break;
+    }
+
+    case ChangeDetectionState::LoadCellError: {
+      // Load Cell Error State: Hardware signal is lost or unreliable
+      // Recovery happens when signal quality stabilizes
+      if (scale.signalQualityPercent > 80 && scale.consecutiveErrors == 0) {
+        // Signal recovered!
+        // Transition to Settling to re-establish baseline
+        transitionState(idx, ChangeDetectionState::Settling, timestampMs);
+        fireEvent(idx, ChangeDetectionEventType::LOAD_CELL_RECOVERED, timestampMs);
       }
       break;
     }
@@ -996,6 +1028,8 @@ const char* ChangeDetection::getStateString(UnitIndex idx) const {
       return "ReplacingKeg";
     case ChangeDetectionState::InvalidWeight:
       return "InvalidWeight";
+    case ChangeDetectionState::LoadCellError:
+      return "LoadCellError";
     case ChangeDetectionState::CalibrationNeeded:
       return "CalibrationNeeded";
     default:
@@ -1066,6 +1100,12 @@ void ChangeDetection::updateSignalQuality(UnitIndex idx, bool isValid,
 
   // Suppress signal quality events during calibration to avoid noise
   if (myScale.isCalibrating(idx)) {
+    return;
+  }
+
+  // Calibration errors are handled by the state machine's CALIBRATION_NEEDED state
+  // and do not contribute to hardware signal quality score.
+  if (reason == SignalErrorReason::CALIBRATION_INVALID) {
     return;
   }
 

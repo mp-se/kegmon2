@@ -30,18 +30,29 @@ The 3D models for the scale bases are hosted in the `3d-designs <https://github.
 .. raw:: html
 
    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+   <script type="module">
+     const modelViewers = document.querySelectorAll("model-viewer");
+     modelViewers.forEach(mv => {
+       mv.addEventListener("load", () => {
+         const materials = mv.model.materials;
+         materials.forEach(material => {
+           material.pbrMetallicRoughness.setBaseColorFactor([0.2, 0.5, 0.8, 1.0]);
+         });
+       });
+     });
+   </script>
    <div style="display: flex; flex-wrap: wrap; gap: 20px;">
      <div style="flex: 1; min-width: 300px;">
-       <h4>Scale Base</h4>
+       <h4>Scale base</h4>
        <model-viewer src="_static/3d/scale2_base.glb" 
-                     style="width: 100%; height: 300px; background-color: #eee;" 
+                     style="width: 100%; height: 300px; background-color: #fafafa;" 
                      auto-rotate camera-controls shadow-intensity="1">
        </model-viewer>
      </div>
      <div style="flex: 1; min-width: 300px;">
-       <h4>Base Cover</h4>
+       <h4>Scale base cover</h4>
        <model-viewer src="_static/3d/scale2_base_cover.glb" 
-                     style="width: 100%; height: 300px; background-color: #eee;" 
+                     style="width: 100%; height: 300px; background-color: #fafafa;" 
                      auto-rotate camera-controls shadow-intensity="1">
        </model-viewer>
      </div>
@@ -55,7 +66,7 @@ Start with mounting in the loadcells in the printed base and make sure the cable
 Step 1.3 - Wire the load cells and temperature sensor
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Mount and solder the temperature sensor on the scale base PCB as indicated by the silkscreen. ONly DS18B20 sensors with 3 
+Mount and solder the temperature sensor on the scale base PCB as indicated by the silkscreen. Only DS18B20 sensors with 3 
 wires are supported since all the temperature sensors share the same onewire bus.
 
 .. image:: images/hx711-mounting.jpg
@@ -63,8 +74,8 @@ wires are supported since all the temperature sensors share the same onewire bus
   :alt: How to wire load cells
 
 Mark the load cells acording to this schematic and solder the cables in the position indicated on the PCB, 
-one row per load cell. If the cabels are to long make sure you **cut them to the same length**. 
-
+one row per load cell. If the cabels are to long make sure you **cut them to the same length**. Use UL (Upper Left), UR (Upper Right),
+LL (Lower Left) and LR (Lower Right) to identify the cables. They should then be soldered to the PCB as shown on the silkscreen
 
 Step 1.4 - Solder the network cable
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -76,6 +87,7 @@ solder the cables directly to the PCB using the following color scheme. Pin 1 is
   :width: 500
   :alt: Cable colors in T568B standard
 
+I usually put some tejp over the soldered connected to keep the cables in position when closing the scale base.
 
 Step 1.4 - Validate scale base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -89,7 +101,8 @@ Step 1.5 - Glue the base cover
 .. note::
   Don't glue the base togehter before you have validated that it works as intended.
 
-TODO
+Put some glue around on the scale base and push the cover in place, make sure its aligned. Use any adhesive 
+that works with plastics.
 
 
 Step 2 - Build the controller
@@ -114,6 +127,8 @@ PCB for 4 scales and display
   :width: 800
   :alt: PCB for ESP32 and display
 
+There are some pins marked EXTENSION and they are reserved for future use and not used in this version.
+
 
 Step 2.1 - Solder the connectors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -135,7 +150,19 @@ Step 2.3 - Mount the components
 
 TODO
 
-Step 2.4 - 3D print the case
+Step 2.4 - Connect the display
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you are using the Lolin 2.4" display and their cable the connection is simple. But 
+if you are using another display then i recommend to buy the lolin cable and then cut / solder the other end to your display.
+
+The following displays are currently supported:
+
+* ILI9341 based displays (240x320) - Lolin 2.4
+
+
+
+Step 2.5 - 3D print the case
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 TODO

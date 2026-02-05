@@ -54,8 +54,6 @@ constexpr auto PIN_LED = BUILTIN_LED;
 #define PIN_SCALE_SDA4 16
 #define PIN_SCALE_SCK4 17
 #define PIN_DS 1
-
-#define CFG_FILENAMEBIN "firmware_32s3pro.bin"
 #endif
 
 #endif  // SRC_MAIN_HPP_

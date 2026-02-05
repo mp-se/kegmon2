@@ -113,8 +113,8 @@ ScaleReadingResult Scale::read(UnitIndex idx) {
   if (myConfig.getScaleFactor(idx) == FACTOR_UNCALIBRATED ||
       myConfig.getScaleOffset(idx) == 0) {  // Not initialized
     // Log.verbose(F("SCAL: HX711 has no configuration [%d]." CR), idx);
-    myChangeDetection.updateSignalQuality(
-        idx, false, SignalErrorReason::CALIBRATION_INVALID, 0.0f, millis());
+    // NOTE: We do NOT report this as a signal quality error via updateSignalQuality anymore.
+    // This allows the state machine to handle the CALIBRATION_NEEDED state cleanly.
     return ScaleReadingResult::createInvalidResult();
   }
 

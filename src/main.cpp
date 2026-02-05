@@ -447,16 +447,19 @@ void checkCoreDump() {
       malloc(sizeof(esp_core_dump_summary_t)));
 
   if (summary) {
-    esp_log_level_set("esp_core_dump_elf", ESP_LOG_VERBOSE);
+    memset(summary, 0, sizeof(esp_core_dump_summary_t));
 
     if (esp_core_dump_get_summary(summary) == ESP_OK) {
       Log.notice(F("Exception cause %d." CR), summary->ex_info.exc_cause);
       Log.notice(F("PC 0x%x." CR), summary->exc_pc);
 
-      for (int i = 0; i < summary->exc_bt_info.depth; i++) {
+      int depth = (summary->exc_bt_info.depth > 16) ? 16 : summary->exc_bt_info.depth;
+      for (int i = 0; i < depth; i++) {
         Log.notice(F("PC(%d) 0x%x." CR), i, summary->exc_bt_info.bt[i]);
       }
     }
+
+    free(summary);
   }
 #endif
 }
