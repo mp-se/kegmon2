@@ -48,4 +48,3 @@ For docs see: https://mp-se.github.io/kegmon2/index.html
 # Known Issues
 
 When flashing the ESP32 s3 PRO the SD card mounting will likley fail, just turn power off/on and it will work again.
-
