@@ -32,7 +32,7 @@ jobs:
           pwd
           ls -al
           ls -al docs 
-          git clone https://github.com/mp-se/kegmon.git --branch ghpages --single-branch ghpages
+          git clone https://github.com/mp-se/kegmon2.git --branch ghpages --single-branch ghpages
           mkdir -p ghpages/docs
           cp -r docs/* ghpages/docs
           cd ghpages
