@@ -5,7 +5,7 @@
 ![pr](https://img.shields.io/github/issues-pr/mp-se/kegmon2)
 ![dev_build](https://img.shields.io/github/actions/workflow/status/mp-se/kegmon2/pio-build.yaml?branch=dev)
 ![doc_build](https://img.shields.io/github/actions/workflow/status/mp-se/kegmon2/doc-build.yaml?branch=master)
-![License](https://img.shields.io/github/license/mp-se/kegmon2)
+![License](https://img.shields.io/badge/license-Dual--GPLv3%2FCommercial-blue)
 ![GitHub Stars](https://img.shields.io/github/stars/mp-se/kegmon2)
 ![Last Commit](https://img.shields.io/github/last-commit/mp-se/kegmon2)
 
@@ -16,6 +16,15 @@
 This is a project that I have done for my own Keezer, if you like it please feel free to suggest improvements. 
 
 For docs see: https://mp-se.github.io/kegmon2/index.html
+
+# License
+
+This project is licensed under a **Dual License** model:
+
+- **Open Source Use**: [GNU GPL v3](LICENSE)
+- **Commercial Use**: [Commercial License Agreement](LICENSE_COMMERCIAL). Required for companies, businesses, or individuals distributing > 100 units/year.
+
+See [LICENSE](LICENSE) for full details and the "Hobbyist Safe Harbor" clause.
 
 # Hardware
 
