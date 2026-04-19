@@ -50,7 +50,8 @@
 void checkCoreDump();
 void dumpDataToInfluxDB();
 
-SerialDebug mySerial(115200L);
+// SerialDebug mySerial(115200L);
+SerialDebug mySerial(56700L);
 KegConfig myConfig(CFG_MDNSNAME, CFG_FILENAME);
 WifiConnection myWifi(&myConfig, CFG_APPNAME, "password", CFG_MDNSNAME);
 OtaUpdate myOta(&myConfig, CFG_APPVER);
