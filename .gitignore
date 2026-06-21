@@ -1,12 +1,12 @@
-.pio/*
-.vscode/*
+.pio/
+.vscode/
 *.map
 *.pyc
-src_docs/_build/*
+src_docs/_build/
 .DS_Store
 idf_*
 old/*
 .env/*
 .venv/*
-test/__pycache__/*
-test/build/*
+__pycache__
+test/build/

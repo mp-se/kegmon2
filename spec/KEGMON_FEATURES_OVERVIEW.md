@@ -1,10 +1,5 @@
 # Kegmon - Features & System Overview
 
-**Version:** January 2026  
-**Status:** ✅ Production Ready
-
----
-
 ## Core Features
 
 ### 1. Multi-Scale Keg Monitoring
