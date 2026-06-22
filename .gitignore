@@ -10,3 +10,4 @@ old/*
 .venv/*
 __pycache__
 test/build/
+hw/confidential_data.txt
