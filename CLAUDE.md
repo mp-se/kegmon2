@@ -27,13 +27,26 @@ cd test && mkdir -p build && cd build && cmake .. && make && ./changedetection_i
 
 ## UI Development
 
-The HTML/JS frontend lives in a sibling repo (`../kegmon2-ui`). After building the UI there, copy built assets:
+The HTML/JS frontend (Vue 3 / Vite / Pinia) lives in `ui/`. After building the UI, copy built assets:
 
 ```bash
 ./copy_ui.sh   # copies dist/assets into html/ as .gz files
 ```
 
 The `.gz` files in `html/` are embedded directly into firmware via `board_build.embed_txtfiles`.
+
+```bash
+# Inside ui/
+npm run dev          # dev server (hot reload against mock API)
+npm run mock         # start mock REST server (nodemon) for local UI dev without device
+npm run build        # production build → dist/
+npm run test         # Vitest unit tests (run once)
+npm run test:watch   # Vitest in watch mode
+npm run lint         # ESLint --fix
+npm run format       # Prettier
+```
+
+The mock server in `ui/mock-server/` simulates the firmware REST API so the UI can be developed without a connected device.
 
 ## PlatformIO Environments
 
@@ -93,6 +106,13 @@ Pour detection triggers when slope < −0.002 kg/sec AND within realistic bounds
 ## Testing
 
 Unit tests live in `test/` and use CMake + GoogleTest. They test core logic extracted from `changedetection.cpp` without Arduino dependencies. No mocking of hardware — logic is extracted directly.
+
+## Specs
+
+Detailed feature specs and state machine requirements live in `spec/`:
+- `STATE_MACHINE_REQUIREMENTS.md` — authoritative requirements for `changedetection`
+- `KEGMON_FEATURES_OVERVIEW.md` — full feature inventory
+- `EVENT_LOGGING_FORMAT.md` — InfluxDB/event schema
 
 ## Notes
 
