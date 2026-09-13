@@ -116,6 +116,21 @@ ScaleReadingResult Scale::read(UnitIndex idx) {
     return ScaleReadingResult::createInvalidResult();
   }
 
+  // HX711::read() blocks on "while (digitalRead(dataPin) == HIGH)" with no
+  // timeout, so a disconnected/miswired sensor never becomes ready and would
+  // hang this call forever - freezing the shared scale task for every scale,
+  // not just this one. Bound the wait so one bad sensor can't take the rest
+  // down with it.
+  constexpr uint32_t READY_TIMEOUT_MS = 200;
+  if (!_hxScale[idx]->wait_ready_timeout(READY_TIMEOUT_MS, 1)) {
+    Log.error(F("SCAL: HX711 not ready within %d ms, skipping read [%d]." CR),
+              READY_TIMEOUT_MS, idx);
+    myChangeDetection.updateSignalQuality(
+        idx, false, SignalErrorReason::TIMEOUT, 0.0f, millis());
+    _stats.recordReading(static_cast<int>(idx), NAN, false, millis());
+    return ScaleReadingResult::createInvalidResult();
+  }
+
   // Log.verbose(F("SCAL: HX711 reading scale for [%d]." CR), idx);
   _hxScale[idx]->set_medavg_mode();
   float raw = _hxScale[idx]->get_units(myConfig.getScaleReadCount());
