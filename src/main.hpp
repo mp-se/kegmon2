@@ -48,7 +48,7 @@ constexpr auto PIN_LED = BUILTIN_LED;
 #define PIN_SCALE_SDA2 39
 #define PIN_SCALE_SCK2 40
 #define PIN_SCALE_SDA3 18
-#define PIN_SCALE_SCK3 38
+#define PIN_SCALE_SCK3 43 // Updated in pcb v1.1
 #define PIN_SCALE_SDA4 16
 #define PIN_SCALE_SCK4 17
 #define PIN_DS 1
