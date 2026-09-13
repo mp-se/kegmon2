@@ -313,10 +313,6 @@ uint8_t Scale::detectSamplingRate(UnitIndex idx) {
   Log.notice(F("SCAL: [%d] detecting sampling rate (attempt %d/3)." CR),
              idx_int, attempt);
 
-  // Count pin transitions to estimate sampling rate
-  // At 10 SPS: ~10 transitions per second
-  // At 80 SPS: ~80 transitions per second
-
   const uint32_t SAMPLE_TIME_MS = 500;  // Sample for 500ms
   const uint32_t TRANSITION_THRESHOLD =
       25;  // ~12.5 transitions per 500ms = 25/1000ms threshold
@@ -338,10 +334,21 @@ uint8_t Scale::detectSamplingRate(UnitIndex idx) {
   Log.notice(F("SCAL: [%d] transitions=%d in %d ms." CR), idx_int,
              transition_count, SAMPLE_TIME_MS);
 
+  // A live sensor toggles at least a few times in 500ms even at 10 SPS
+  // (~5 ready/not-ready cycles = ~10 edges). Zero transitions means the
+  // sensor isn't communicating at all - report failure (0) so the caller's
+  // retry logic actually retries
+  if (transition_count == 0) {
+    Log.notice(F("SCAL: [%d] no transitions detected, sensor not responding."
+                 CR),
+               idx_int);
+    return 0;
+  }
+
   // Determine rate based on transition count
   // 10 SPS = ~10 transitions per second = ~5 in 500ms
   // 80 SPS = ~80 transitions per second = ~40 in 500ms
-  uint8_t detected_rate = 0;
+  uint8_t detected_rate;
 
   if (transition_count < TRANSITION_THRESHOLD) {
     detected_rate = 10;
@@ -354,10 +361,8 @@ uint8_t Scale::detectSamplingRate(UnitIndex idx) {
   }
 
   _detectedSamplingRate[idx_int] = detected_rate;
-  if (detected_rate > 0) {
-    Log.notice(F("SCAL: [%d] Sampling rate = %d sps." CR), idx_int,
-               detected_rate);
-  }
+  Log.notice(F("SCAL: [%d] Sampling rate = %d sps." CR), idx_int,
+             detected_rate);
 
   return detected_rate;
 }
