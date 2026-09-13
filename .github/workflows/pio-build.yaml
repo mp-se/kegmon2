@@ -75,7 +75,7 @@ jobs:
 
       - name: Build firmware
         run: >-
-          pio run --verbose --jobs 6
+          pio run --jobs 6
           --environment kegmon-esp32s3-pro-tft-sd
           --environment kegmon-esp32s3-pro-tft-9488-sd
           --environment kegmon-esp32s3-pro-tft-9341-sd
