@@ -46,10 +46,10 @@ def after_build(source, target, env):
         shutil.copyfile( source, target )
 
 print("Adding custom build step (copy firmware):")
-# Target the generated binary directly.  With SCons 4.11, attaching a bare
-# Python callback to the `buildprog` alias leaves its command text as Null;
-# verbose CI builds then fail while SCons tries to print that action.
+# Target the generated binary directly. Keep this as a SCons Action rather
+# than PlatformIO's VerboseAction: PIOVERBOSE unwraps VerboseAction back to a
+# bare callback, which leaves the command text as Null in SCons 4.11.
 env.AddPostAction(
     "$BUILD_DIR/${PROGNAME}.bin",
-    env.VerboseAction(after_build, "Copying firmware artifacts"),
+    env.Action(after_build, "Copying firmware artifacts"),
 )
