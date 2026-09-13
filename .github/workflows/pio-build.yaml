@@ -65,17 +65,20 @@ jobs:
           cp ui/dist/assets/style.css.gz html/app.css.gz
           cp ui/dist/assets/index.js.gz html/app.js.gz
 
-      - name: Setup PlatformIO
-        uses: n-vr/setup-platformio-action@v1.0.1
-
-      - name: PlatformIO Run
-        uses: karniv00l/platformio-run-action@v1
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          environments: "kegmon-esp32s3-pro-tft-sd,kegmon-esp32s3-pro-tft-9488-sd,kegmon-esp32s3-pro-tft-9341-sd"
-          jobs: 6
-          silent: false
-          verbose: true
-          disable-auto-clean: false
+          python-version: '3.11'
+
+      - name: Install PlatformIO
+        run: python -m pip install --upgrade platformio
+
+      - name: Build firmware
+        run: >-
+          pio run --verbose --jobs 6
+          --environment kegmon-esp32s3-pro-tft-sd
+          --environment kegmon-esp32s3-pro-tft-9488-sd
+          --environment kegmon-esp32s3-pro-tft-9341-sd
 
       - uses: EndBug/add-and-commit@v9
         if: ${{ github.event_name != 'pull_request' }}
