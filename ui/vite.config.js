@@ -66,7 +66,9 @@ export default defineConfig({
         comments: false
       }
     },
-    rollupOptions: {
+    // Vite 8 uses Rolldown. These retain the previous output layout while
+    // avoiding Vite's deprecated Rollup compatibility options.
+    rolldownOptions: {
       treeshake: true, // Use default tree-shaking instead of aggressive preset
       external: [
         'json-parse-even-better-errors'
@@ -83,11 +85,10 @@ export default defineConfig({
         warn(warning)
       },
       output: {
-        inlineDynamicImports: true,
+        codeSplitting: false,
         entryFileNames: `assets/[name].js`,
         chunkFileNames: `assets/[name].js`,
-        assetFileNames: `assets/[name].[ext]`,
-        manualChunks: undefined
+        assetFileNames: `assets/[name].[ext]`
       }
     }
   }
