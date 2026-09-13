@@ -11,3 +11,4 @@ old/*
 __pycache__
 test/build/
 graphify-out/
+*.py
