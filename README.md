@@ -57,3 +57,4 @@ See [LICENSE](LICENSE) for full details and the "Hobbyist Safe Harbor" clause.
 # Known Issues
 
 When flashing the ESP32 s3 PRO the SD card mounting will likley fail, just turn power off/on and it will work again.
+
