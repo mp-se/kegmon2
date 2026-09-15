@@ -213,7 +213,7 @@ class KegConfig : public BaseConfig {
 
   float getKegWeight(UnitIndex idx) const { return _kegs[idx].kegWeight; }
   void setKegWeight(UnitIndex idx, float f) {
-    if (!isnan(f)) {  // Ignore NAN input, keep previous value
+    if (isfinite(f) && f >= 0.0f) {
       _kegs[idx].kegWeight = f;
       _saveNeeded = true;
     }
@@ -221,7 +221,7 @@ class KegConfig : public BaseConfig {
 
   float getKegVolume(UnitIndex idx) const { return _kegs[idx].kegVolume; }
   void setKegVolume(UnitIndex idx, float f) {
-    if (!isnan(f)) {  // Ignore NAN input, keep previous value
+    if (isfinite(f) && f > 0.0f) {
       _kegs[idx].kegVolume = f;
       _saveNeeded = true;
     }
@@ -229,7 +229,7 @@ class KegConfig : public BaseConfig {
 
   float getGlassVolume(UnitIndex idx) const { return _kegs[idx].glassVolume; }
   void setGlassVolume(UnitIndex idx, float f) {
-    if (!isnan(f)) {  // Ignore NAN input, keep previous value
+    if (isfinite(f) && f > 0.0f) {
       _kegs[idx].glassVolume = f;
       _saveNeeded = true;
     }
@@ -275,7 +275,7 @@ class KegConfig : public BaseConfig {
   void setScaleFactor(UnitIndex idx, float f) {
     // Protect against NAN values from corrupted config - default to
     // uncalibrated
-    _kegs[idx].scaleFactor = isnan(f) ? FACTOR_UNCALIBRATED : f;
+    _kegs[idx].scaleFactor = isfinite(f) ? f : FACTOR_UNCALIBRATED;
     _saveNeeded = true;
   }
 

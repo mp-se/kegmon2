@@ -21,15 +21,17 @@
  */
 #ifndef SRC_TEMP_MGR_HPP_
 #define SRC_TEMP_MGR_HPP_
+#include <algorithm>
 #include <memory>
 #include <temp_base.hpp>
 #include <utils.hpp>
 
 class TempSensorManager {
  private:
+  static constexpr int MAX_TEMPERATURE_SENSORS = MAX_SCALES + 1;
   std::unique_ptr<TempSensorBase> _sensor;
-  float _lastTemperature[5] = {NAN, NAN, NAN, NAN,
-                               NAN};  // Support for scale bases + one extra
+  float _lastTemperature[MAX_TEMPERATURE_SENSORS] = {
+      NAN, NAN, NAN, NAN, NAN};  // Scale bases plus one extra
 
  public:
   TempSensorManager() {}
@@ -41,11 +43,14 @@ class TempSensorManager {
   void read();
 
   bool hasTemp(int index) const {
-    if (index < 0 || index >= 5) return false;
+    if (index < 0 || index >= MAX_TEMPERATURE_SENSORS) return false;
     return !isnan(_lastTemperature[index]);
   }
-  bool hasSensor() const { return _sensor.get()->hasSensor(); }
-  int getSensorCount() const { return _sensor.get()->getSensorCount(); }
+  bool hasSensor() const { return _sensor && _sensor->hasSensor(); }
+  int getSensorCount() const {
+    if (!_sensor) return 0;
+    return std::min(_sensor->getSensorCount(), MAX_TEMPERATURE_SENSORS);
+  }
 
   String getSensorId(int index) const {
     if (index < 0 || index >= getSensorCount()) return "";
@@ -53,7 +58,9 @@ class TempSensorManager {
   }
 
   float getLastTempC(int index) const {
-    if (index < 0 || index > getSensorCount()) return NAN;
+    if (index < 0 || index >= getSensorCount() ||
+        index >= MAX_TEMPERATURE_SENSORS)
+      return NAN;
     return _lastTemperature[index];
   }
 

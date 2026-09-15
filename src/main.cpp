@@ -272,7 +272,8 @@ void loop() {
         
         // Calculate glasses from stable volume
         float stableVolume = myChangeDetection.getStableVolume(event.unitIndex);
-        float glasses = stableVolume / myConfig.getGlassVolume(event.unitIndex);
+        const float glassVolume = myConfig.getGlassVolume(event.unitIndex);
+        float glasses = glassVolume > 0.0f ? stableVolume / glassVolume : 0.0f;
         
         // Push keg information to integrations
         myPush.pushKegInformation(event.unitIndex, stableVolume,

@@ -76,8 +76,10 @@ ScaleReadingResult ScaleFilterPipeline::update(float raw, uint64_t timestampMs) 
 
 void ScaleFilterPipeline::calculateSlopes(const ScaleReadingResult& result,
                                            uint64_t timestampMs) {
-  // Array of filter values in same order as FilterType enum
-  float filterValues[11] = {
+  // Array indexed by FilterType. FIR has no implementation in this pipeline,
+  // so it is explicitly unavailable rather than shifting later filter indexes.
+  float filterValues[FILTER_TYPE_COUNT] = {
+    result.raw,
     result.moving_average,
     result.ema,
     result.weighted_ma,
@@ -87,20 +89,25 @@ void ScaleFilterPipeline::calculateSlopes(const ScaleReadingResult& result,
     result.complementary,
     result.alphabeta,
     result.butterworth,
+    NAN,
     result.chebyshev,
     result.kalman
   };
 
   // Calculate slope for each filter
-  for (int i = 0; i < 11; i++) {
+  for (int i = 0; i < FILTER_TYPE_COUNT; i++) {
     SlopeMetrics& metrics = _slopeMetrics[i];
+
+    if (isnan(filterValues[i])) {
+      continue;
+    }
 
     if (metrics.lastUpdateMs == 0) {
       // First reading - just initialize
       metrics.previousValue = filterValues[i];
       metrics.lastUpdateMs = timestampMs;
       metrics.slopeReadings = 1;
-      return;
+      continue;
     }
 
     uint64_t timeDeltaMs = timestampMs - metrics.lastUpdateMs;
@@ -118,34 +125,34 @@ void ScaleFilterPipeline::calculateSlopes(const ScaleReadingResult& result,
 }
 
 float ScaleFilterPipeline::getAverageSlope(int filterIndex) const {
-  if (filterIndex < 0 || filterIndex >= 11) {
+  if (filterIndex < 0 || filterIndex >= FILTER_TYPE_COUNT) {
     return 0.0f;
   }
   return _slopeMetrics[filterIndex].getAverageSlope();
 }
 
 float ScaleFilterPipeline::getCurrentSlope(int filterIndex) const {
-  if (filterIndex < 0 || filterIndex >= 11) {
+  if (filterIndex < 0 || filterIndex >= FILTER_TYPE_COUNT) {
     return 0.0f;
   }
   return _slopeMetrics[filterIndex].currentSlope;
 }
 
 SlopeMetrics ScaleFilterPipeline::getSlopeMetrics(int filterIndex) const {
-  if (filterIndex < 0 || filterIndex >= 11) {
+  if (filterIndex < 0 || filterIndex >= FILTER_TYPE_COUNT) {
     return SlopeMetrics();
   }
   return _slopeMetrics[filterIndex];
 }
 
 void ScaleFilterPipeline::resetSlopes() {
-  for (int i = 0; i < 11; i++) {
+  for (int i = 0; i < FILTER_TYPE_COUNT; i++) {
     _slopeMetrics[i].reset();
   }
 }
 
 void ScaleFilterPipeline::resetSlope(int filterIndex) {
-  if (filterIndex >= 0 && filterIndex < 11) {
+  if (filterIndex >= 0 && filterIndex < FILTER_TYPE_COUNT) {
     _slopeMetrics[filterIndex].reset();
   }
 }

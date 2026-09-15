@@ -65,8 +65,8 @@ struct ScaleStatistics {
   }
 
   float getRawAverage() const {
-    if (totalReadings == 0) return 0.0f;
-    return rawSum / totalReadings;
+    if (validReadings == 0) return 0.0f;
+    return rawSum / validReadings;
   }
 
   void recordReading(float rawValue, bool isValid, uint64_t timestampMs) {
@@ -75,7 +75,7 @@ struct ScaleStatistics {
       validReadings++;
       rawSum += rawValue;
 
-      if (totalReadings == 1) {
+      if (validReadings == 1) {
         rawMin = rawValue;
         rawMax = rawValue;
         firstReadingTimeMs = timestampMs;

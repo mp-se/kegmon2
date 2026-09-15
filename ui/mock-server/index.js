@@ -211,14 +211,14 @@ app.get('/api/stability', (req, res) => {
   res.send(statsData)
 })
 
-app.get('/api/statistics', (req, res) => {
-  console.log('GET: /api/statistics')
+app.get('/api/statistic', (req, res) => {
+  console.log('GET: /api/statistic')
   res.type('application/json')
   res.send(statisticsData)
 })
 
-app.get('/api/statistics/clear', (req, res) => {
-  console.log('GET: /api/statistics/clear')
+app.get('/api/statistic/clear', (req, res) => {
+  console.log('GET: /api/statistic/clear')
   res.type('application/json')
   res.send({ success: true, message: 'Statistics cleared' })
 })

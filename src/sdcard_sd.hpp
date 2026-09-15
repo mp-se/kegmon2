@@ -79,7 +79,11 @@ class SdCardSD : public SdCard {
     return _hasCard;
   }
 
-  void end() { SD.end(); }
+  void end() {
+    SD.end();
+    _hasCard = false;
+    _cardSize = 0;
+  }
 
   File open(const String &path, const char *mode = FILE_READ,
             bool create = false) {

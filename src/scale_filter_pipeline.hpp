@@ -177,7 +177,9 @@ class ScaleFilterPipeline {
   std::unique_ptr<ScaleFilter> _filter_kalman;
 
   // Slope tracking for each filter (for derivative-based analysis)
-  SlopeMetrics _slopeMetrics[11];  // One for each filter
+  static constexpr int FILTER_TYPE_COUNT =
+      static_cast<int>(FilterType::FILTER_KALMAN) + 1;
+  SlopeMetrics _slopeMetrics[FILTER_TYPE_COUNT];
   uint64_t _lastUpdateMs = 0;      // Track time between updates
   ScaleReadingResult _lastResult;
 
