@@ -156,9 +156,13 @@ Step 2.4 - Connect the display
 If you are using the Lolin 2.4" display and their cable the connection is simple. But 
 if you are using another display then i recommend to buy the lolin cable and then cut / solder the other end to your display.
 
-The following displays are currently supported:
+The following display builds are currently supported:
 
-* ILI9341 based displays (240x320) - Lolin 2.4
+* ILI9341-based displays (240 x 320), with or without an SD card.
+* ILI9488-based displays (480 x 320), with an SD card.
+
+Use the firmware binary that matches the TFT controller and wiring. The
+ILI9341 Lolin 2.4-inch display is the reference configuration described here.
 
 
 
@@ -173,4 +177,3 @@ Step 3 - Flash the device
 
 The first step is to flash the firmware, I recommend using my webflasher as the easy option. Detailed 
 instructions can be found here :ref:`installation`
-

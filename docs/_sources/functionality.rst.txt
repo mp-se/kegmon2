@@ -25,13 +25,19 @@ KegMon is a comprehensive keg monitoring system designed for homebrewers, provid
 
   Designed to support up to 4 scales simultaneously, with each scale capable of displaying real-time statistics on an attached display, enabling monitoring of multiple kegs in a single system.
 
-* **Stable Level Detection**
+* **Stable Level Detection and Keg Lifecycle States**
 
-  Advanced software algorithms that detect and confirm stable liquid levels in each keg, filtering out noise from movement or environmental factors for accurate readings.
+  Each scale has an independent state machine for settling, stable monitoring,
+  pouring, keg absence/replacement, calibration-required, invalid readings and
+  load-cell errors. A new baseline is committed only after the signal has
+  settled, which avoids locking an intermediate post-pour weight.
 
-* **Pour Detection**
+* **Pour Detection and Event History**
 
-  Intelligent detection of pour events, tracking when beer is dispensed to log consumption and update remaining volume calculations automatically.
+  Dual-filter slope analysis detects realistic downward flow, tracks the pour,
+  and records completion data. Events are available in the web interface; when
+  SD-card support is enabled and the card mounts, persistent CSV event history
+  is also available.
 
 * **Volume Estimation**
 
@@ -45,6 +51,11 @@ KegMon is a comprehensive keg monitoring system designed for homebrewers, provid
 
   Connects to BrewSpy to fetch and import brew data, automatically updating keg levels and beer information when batches are changed or new brews are added.
 
+* **BrewLogger and Barhelper Integrations**
+
+  Sends keg and pour information to the configured BrewLogger endpoint and can
+  publish keg information to configured Barhelper monitors.
+
 * **Brewfather Integration**
 
   Pulls data from Brewfather on recent brews, simplifying the import of batch details, recipes, and gravity readings for streamlined setup and tracking.
@@ -55,7 +66,8 @@ KegMon is a comprehensive keg monitoring system designed for homebrewers, provid
 
 * **Temperature Sensors**
 
-  Supports DS18B20 temperature sensors placed in each keg base, providing real-time temperature monitoring to help maintain optimal beer storage conditions.
+  Supports DS18B20 sensors on the shared OneWire bus. A sensor ID can be
+  assigned to each tap for per-keg temperature display and integrations.
 
 * **Backup and Restore of Settings**
 

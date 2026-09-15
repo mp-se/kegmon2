@@ -284,6 +284,12 @@
 <a class="reference internal image-reference" href="_images/ui_device_stats.png"><img alt="Statistics" src="_images/ui_device_stats.png" style="width: 600px;" /></a>
 <p>This page helps diagnose unstable builds. Keep the browser open to view historical data (raw, Kalman-filtered, and stable values) for analysis. Data is stored in the browser and resets on refresh.</p>
 </section>
+<section id="device-events">
+<h2>Device - Events<a class="headerlink" href="#device-events" title="Permalink to this heading">¶</a></h2>
+<p>The Events page displays persistent event history when an SD card is mounted.
+Refresh the data and optionally filter it by scale. The current session’s most
+recent events are also shown in the statistics view.</p>
+</section>
 <section id="device-wifi">
 <h2>Device - WiFi<a class="headerlink" href="#device-wifi" title="Permalink to this heading">¶</a></h2>
 <p>Manage WiFi connections and settings.</p>
@@ -303,7 +309,9 @@
 <li><p><strong>Empty keg weight</strong>: Weight of the empty keg, used to calculate remaining beer volume.</p></li>
 <li><p><strong>Glass volume</strong>: Standard glass size for estimating remaining pours.</p></li>
 <li><p><strong>Keg volume</strong>: Standard keg size for validating weight and calculating remaining volume.</p></li>
-<li><p><strong>Temperature sensor</strong>: Connect a temperature sensor to the specific scale base. If not used the first sensor value will be used.</p></li>
+<li><p><strong>Temperature sensor</strong>: Assign a detected DS18B20 sensor ID to the tap. The
+sensors share a OneWire bus; an unassigned tap falls back to the first sensor
+value when one is available.</p></li>
 </ul>
 </section>
 <section id="taps-beers">
@@ -342,11 +350,17 @@
 <a class="reference internal image-reference" href="_images/ui_post_barhelper.png"><img alt="Barhelper integration" src="_images/ui_post_barhelper.png" style="width: 600px;" /></a>
 <p>Enter API keys and monitor names. Obtain the key from Barhelper settings (save it securely, as it’s not retrievable later). Monitors are added automatically on first run.</p>
 </section>
+<section id="integration-brewlogger">
+<h2>Integration - BrewLogger<a class="headerlink" href="#integration-brewlogger" title="Permalink to this heading">¶</a></h2>
+<p>Enter the BrewLogger base URL. Keg state and pour information are sent to that
+endpoint when the integration is configured.</p>
+</section>
 <section id="integration-influx">
 <h2>Integration - Influx<a class="headerlink" href="#integration-influx" title="Permalink to this heading">¶</a></h2>
 <p>Send data to InfluxDB for analysis.</p>
 <a class="reference internal image-reference" href="_images/ui_post_influxdb.png"><img alt="Influx integration" src="_images/ui_post_influxdb.png" style="width: 600px;" /></a>
-<p>Configure InfluxDB v2 for logging scale and internal parameters. If enabled data will be logged every second for all the scales and paramaters.</p>
+<p>Configure InfluxDB v2 for logging scale and internal parameters. When enabled,
+the firmware sends periodic data for all configured scales and records events.</p>
 </section>
 <section id="serial-console">
 <h2>Serial Console<a class="headerlink" href="#serial-console" title="Permalink to this heading">¶</a></h2>
@@ -358,13 +372,16 @@
 <h2>Backup &amp; Recovery<a class="headerlink" href="#backup-recovery" title="Permalink to this heading">¶</a></h2>
 <p>Manage configuration backups.</p>
 <a class="reference internal image-reference" href="_images/ui_other_backup.png"><img alt="Backup configuration" src="_images/ui_other_backup.png" style="width: 600px;" /></a>
-<p>Export current settings or restore from a saved JSON file.</p>
+<p>Create a backup file from the current settings or restore a KegMon backup file.
+Restoring replaces the corresponding configuration fields and saves them to the
+device, so keep a known-good backup before experimenting.</p>
 </section>
 <section id="firmware-update">
 <h2>Firmware Update<a class="headerlink" href="#firmware-update" title="Permalink to this heading">¶</a></h2>
 <p>Update device firmware over-the-air.</p>
 <a class="reference internal image-reference" href="_images/ui_other_firmware.png"><img alt="Upload firmware" src="_images/ui_other_firmware.png" style="width: 600px;" /></a>
-<p>Upload new firmware files without serial connection.</p>
+<p>Upload the <code class="docutils literal notranslate"><span class="pre">.bin</span></code> firmware file that matches the device information shown on
+the page. The device restarts after a successful upload.</p>
 </section>
 <section id="support">
 <h2>Support<a class="headerlink" href="#support" title="Permalink to this heading">¶</a></h2>
@@ -440,6 +457,7 @@
 <li><a class="reference internal" href="#device-settings">Device - Settings</a></li>
 <li><a class="reference internal" href="#device-calibration">Device - Calibration</a></li>
 <li><a class="reference internal" href="#device-stability">Device - Stability</a></li>
+<li><a class="reference internal" href="#device-events">Device - Events</a></li>
 <li><a class="reference internal" href="#device-wifi">Device - WiFi</a></li>
 <li><a class="reference internal" href="#taps-settings">Taps - Settings</a></li>
 <li><a class="reference internal" href="#taps-beers">Taps - Beers</a></li>
@@ -448,6 +466,7 @@
 <li><a class="reference internal" href="#integration-brewfather">Integration - Brewfather</a></li>
 <li><a class="reference internal" href="#integration-brewspy">Integration - Brewspy</a></li>
 <li><a class="reference internal" href="#integration-barhelper">Integration - Barhelper</a></li>
+<li><a class="reference internal" href="#integration-brewlogger">Integration - BrewLogger</a></li>
 <li><a class="reference internal" href="#integration-influx">Integration - Influx</a></li>
 <li><a class="reference internal" href="#serial-console">Serial Console</a></li>
 <li><a class="reference internal" href="#backup-recovery">Backup &amp; Recovery</a></li>
@@ -465,7 +484,7 @@
       
     </aside>
   </div>
-</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=73cda6fb"></script>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=f62554d0"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/scripts/furo.js?v=5fa4622c"></script>

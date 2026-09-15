@@ -53,6 +53,13 @@ Monitor the stability of your hardware setup to ensure reliable readings.
 
 This page helps diagnose unstable builds. Keep the browser open to view historical data (raw, Kalman-filtered, and stable values) for analysis. Data is stored in the browser and resets on refresh.
 
+Device - Events
+***************
+
+The Events page displays persistent event history when an SD card is mounted.
+Refresh the data and optionally filter it by scale. The current session's most
+recent events are also shown in the statistics view.
+
 Device - WiFi
 *************
 
@@ -79,7 +86,9 @@ Configure individual tap settings for volume calculations and beer details.
 * **Empty keg weight**: Weight of the empty keg, used to calculate remaining beer volume.
 * **Glass volume**: Standard glass size for estimating remaining pours.
 * **Keg volume**: Standard keg size for validating weight and calculating remaining volume.
-* **Temperature sensor**: Connect a temperature sensor to the specific scale base. If not used the first sensor value will be used.
+* **Temperature sensor**: Assign a detected DS18B20 sensor ID to the tap. The
+  sensors share a OneWire bus; an unassigned tap falls back to the first sensor
+  value when one is available.
 
 Taps - Beers
 ************
@@ -147,6 +156,12 @@ Integrate with Barhelper for additional monitoring.
 
 Enter API keys and monitor names. Obtain the key from Barhelper settings (save it securely, as it's not retrievable later). Monitors are added automatically on first run.
 
+Integration - BrewLogger
+************************
+
+Enter the BrewLogger base URL. Keg state and pour information are sent to that
+endpoint when the integration is configured.
+
 Integration - Influx
 ********************
 
@@ -156,7 +171,8 @@ Send data to InfluxDB for analysis.
   :width: 600
   :alt: Influx integration
 
-Configure InfluxDB v2 for logging scale and internal parameters. If enabled data will be logged every second for all the scales and paramaters. 
+Configure InfluxDB v2 for logging scale and internal parameters. When enabled,
+the firmware sends periodic data for all configured scales and records events.
 
 Serial Console
 **************
@@ -178,7 +194,9 @@ Manage configuration backups.
   :width: 600
   :alt: Backup configuration
 
-Export current settings or restore from a saved JSON file.
+Create a backup file from the current settings or restore a KegMon backup file.
+Restoring replaces the corresponding configuration fields and saves them to the
+device, so keep a known-good backup before experimenting.
 
 Firmware Update
 ***************
@@ -189,7 +207,8 @@ Update device firmware over-the-air.
   :width: 600
   :alt: Upload firmware
 
-Upload new firmware files without serial connection.
+Upload the ``.bin`` firmware file that matches the device information shown on
+the page. The device restarts after a successful upload.
 
 Support
 *******

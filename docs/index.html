@@ -248,18 +248,21 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="welcome-to-kegmon-keg-level-monitor">
-<h1>Welcome to KegMon - Keg Level Monitor<a class="headerlink" href="#welcome-to-kegmon-keg-level-monitor" title="Permalink to this heading">¶</a></h1>
+          <section id="welcome-to-kegmon2-keg-level-monitor">
+<h1>Welcome to KegMon2 - Keg Level Monitor<a class="headerlink" href="#welcome-to-kegmon2-keg-level-monitor" title="Permalink to this heading">¶</a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Reflects version <em>v2.0.0</em>, Last updated 2026-01-25</p>
+<p>Reflects the current v2.0.0 (alfa 1), last reviewed 2026-09-15.</p>
 </div>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
 <p>KegMon is an open-source keg monitoring system designed for homebrewers to track beer levels, pours, and environmental conditions in real-time. The software is tailored to personal needs and integrates with popular services like Brewfather, BrewSpy, and Home Assistant. Suggestions for additional integrations are welcome—feel free to raise requests on GitHub.</p>
 <p>The system features two primary interfaces: a graphical TFT display on the device and a web-based interface accessible from any browser. It uses advanced filtering algorithms to compensate for the unpredictability of inexpensive load cells, ensuring stable and accurate readings.</p>
 <p>To detect level changes, KegMon employs a dual-filter approach: a fast filter triggers the system into a “pouring” state upon initial weight changes, while slower filters validate the event by measuring the weight drop per second (slope). This helps distinguish genuine pours from minor fluctuations.</p>
-<p>The system can handle multiple consecutive pours by stabilizing readings and splitting volume based on configured glass sizes, provided the weight exceeds a single glass threshold. It’s designed for up to 4 kegs but automatically detects the number of connected HX711 boards and can adapt to fewer. Future expansions may support up to 8 kegs.</p>
+<p>The system can handle multiple consecutive pours by stabilizing readings and
+splitting larger pours using the configured glass size. It supports up to four
+kegs and disables a scale for the session when its HX711 is not found at
+startup.</p>
 <p>The v2.0.0 update is backward-compatible with scales from previous versions, requiring only a controller upgrade. The project includes:</p>
 <ul class="simple">
 <li><p>Software for managing scales, processing readings, and providing interfaces.</p></li>
@@ -276,17 +279,22 @@
 </section>
 <section id="display">
 <h3>Display<a class="headerlink" href="#display" title="Permalink to this heading">¶</a></h3>
-<p>Two display options are supported:</p>
+<p>The current firmware builds support these TFT controller variants:</p>
 <ul class="simple">
-<li><p>Lolin TFT 2.4” – A compact touchscreen for local interaction.</p></li>
+<li><p>ILI9341 at 240 x 320 pixels, with or without SD-card support.</p></li>
+<li><p>ILI9488 at 480 x 320 pixels, with SD-card support.</p></li>
 </ul>
+<p>The Lolin 2.4-inch ILI9341 display is the documented reference display.</p>
 <a class="reference internal image-reference" href="_images/tft_24.jpg"><img alt="Lolin TFT 2.4&quot; display" src="_images/tft_24.jpg" style="width: 400px;" /></a>
 </section>
 <section id="hx711">
 <h3>HX711<a class="headerlink" href="#hx711" title="Permalink to this heading">¶</a></h3>
-<p>For the ADC (HX711 board), the Purple or Red variants are recommended, as the project’s PCB is designed for their pinout. Green boards have a different pinout and are not compatible.</p>
+<p>For the ADC (HX711 board), use a module whose pinout matches the controller
+PCB. The firmware measures whether each detected HX711 is operating at 10 or
+80 samples per second; it does not require a particular sampling-rate variant.</p>
 <a class="reference internal image-reference" href="_images/hx711-options.png"><img alt="HX711 boards" src="_images/hx711-options.png" style="width: 800px;" /></a>
-<p>Note: Inexpensive green HX711 boards cannot be used, as they do not support the 80 samples per second mode required for effective filtering.</p>
+<p>Verify the module’s pinout and wiring before powering the controller. A module
+that does not respond during startup leaves that scale disabled.</p>
 </section>
 <section id="temperature-sensor">
 <h3>Temperature Sensor<a class="headerlink" href="#temperature-sensor" title="Permalink to this heading">¶</a></h3>
@@ -316,7 +324,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="functionality.html">Functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="releases.html#v2-0-0">v2.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="releases.html#v2-0-0-alfa-1">v2.0.0 - alfa 1</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="building.html">Building a device</a><ul>
@@ -338,6 +346,7 @@
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#device-settings">Device - Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#device-calibration">Device - Calibration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#device-stability">Device - Stability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#device-events">Device - Events</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#device-wifi">Device - WiFi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#taps-settings">Taps - Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#taps-beers">Taps - Beers</a></li>
@@ -346,6 +355,7 @@
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#integration-brewfather">Integration - Brewfather</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#integration-brewspy">Integration - Brewspy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#integration-barhelper">Integration - Barhelper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#integration-brewlogger">Integration - BrewLogger</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#integration-influx">Integration - Influx</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#serial-console">Serial Console</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html#backup-recovery">Backup &amp; Recovery</a></li>
@@ -356,7 +366,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">Licence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="development.html#contributing-to-kegmon">Contributing to KegMon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#contributing-to-kegmon2">Contributing to KegMon2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="development.html#getting-started">Getting Started</a></li>
 <li class="toctree-l2"><a class="reference internal" href="development.html#required-tools">Required Tools</a></li>
 </ul>
@@ -420,7 +430,7 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Welcome to KegMon - Keg Level Monitor</a><ul>
+<li><a class="reference internal" href="#">Welcome to KegMon2 - Keg Level Monitor</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#hardware-options">Hardware Options</a><ul>
 <li><a class="reference internal" href="#board">Board</a></li>
@@ -442,7 +452,7 @@
       
     </aside>
   </div>
-</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=73cda6fb"></script>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=f62554d0"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/scripts/furo.js?v=5fa4622c"></script>

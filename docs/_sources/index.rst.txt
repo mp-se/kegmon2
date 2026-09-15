@@ -3,11 +3,11 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to KegMon - Keg Level Monitor
--------------------------------------
+Welcome to KegMon2 - Keg Level Monitor
+--------------------------------------
 
 .. note::
-  Reflects version *v2.0.0*, Last updated 2026-01-25
+  Reflects the current v2.0.0 (alfa 1), last reviewed 2026-09-15.
 
 Introduction
 ============
@@ -18,7 +18,10 @@ The system features two primary interfaces: a graphical TFT display on the devic
 
 To detect level changes, KegMon employs a dual-filter approach: a fast filter triggers the system into a "pouring" state upon initial weight changes, while slower filters validate the event by measuring the weight drop per second (slope). This helps distinguish genuine pours from minor fluctuations.
 
-The system can handle multiple consecutive pours by stabilizing readings and splitting volume based on configured glass sizes, provided the weight exceeds a single glass threshold. It's designed for up to 4 kegs but automatically detects the number of connected HX711 boards and can adapt to fewer. Future expansions may support up to 8 kegs.
+The system can handle multiple consecutive pours by stabilizing readings and
+splitting larger pours using the configured glass size. It supports up to four
+kegs and disables a scale for the session when its HX711 is not found at
+startup.
 
 The v2.0.0 update is backward-compatible with scales from previous versions, requiring only a controller upgrade. The project includes:
 
@@ -41,9 +44,12 @@ The current version exclusively supports the Lolin ESP32 S3 PRO board, which pro
 Display
 *******
 
-Two display options are supported:
+The current firmware builds support these TFT controller variants:
 
-* Lolin TFT 2.4" – A compact touchscreen for local interaction.
+* ILI9341 at 240 x 320 pixels, with or without SD-card support.
+* ILI9488 at 480 x 320 pixels, with SD-card support.
+
+The Lolin 2.4-inch ILI9341 display is the documented reference display.
 
 .. image:: images/tft_24.jpg
   :width: 400
@@ -52,13 +58,16 @@ Two display options are supported:
 HX711
 *****
 
-For the ADC (HX711 board), the Purple or Red variants are recommended, as the project's PCB is designed for their pinout. Green boards have a different pinout and are not compatible.
+For the ADC (HX711 board), use a module whose pinout matches the controller
+PCB. The firmware measures whether each detected HX711 is operating at 10 or
+80 samples per second; it does not require a particular sampling-rate variant.
 
 .. image:: images/hx711-options.png
   :width: 800
   :alt: HX711 boards
 
-Note: Inexpensive green HX711 boards cannot be used, as they do not support the 80 samples per second mode required for effective filtering.
+Verify the module's pinout and wiring before powering the controller. A module
+that does not respond during startup leaves that scale disabled.
 
 Temperature Sensor
 ******************
@@ -104,4 +113,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

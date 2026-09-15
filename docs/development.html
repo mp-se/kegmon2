@@ -250,12 +250,13 @@
         <article role="main" id="furo-main-content">
           <section id="development">
 <span id="id1"></span><h1>Development<a class="headerlink" href="#development" title="Permalink to this heading">¶</a></h1>
-<section id="contributing-to-kegmon">
-<h2>Contributing to KegMon<a class="headerlink" href="#contributing-to-kegmon" title="Permalink to this heading">¶</a></h2>
-<p>Development for KegMon is conducted using VS Code with the PlatformIO extension for Arduino-based ESP32 programming. The documentation is built with Sphinx and hosted on GitHub Pages.</p>
-<p>We use pre-commit hooks to enforce coding standards, ensuring consistent formatting and quality C++ code. All pull requests must pass pre-commit validation before merging.</p>
-<p>The CI/CD pipeline relies on GitHub Actions for automated firmware builds and documentation publishing.</p>
-<p>Testing includes a unit test target that currently requires hardware but is planned to migrate to Wokwi’s GitHub Actions for simulation. A Python script validates API outputs to ensure correctness.</p>
+<section id="contributing-to-kegmon2">
+<h2>Contributing to KegMon2<a class="headerlink" href="#contributing-to-kegmon2" title="Permalink to this heading">¶</a></h2>
+<p>KegMon is an ESP32-S3 Arduino/PlatformIO project. The web UI is a Vue 3/Vite
+application in <code class="docutils literal notranslate"><span class="pre">ui/</span></code>; its production assets are embedded in the firmware.
+The documentation is built with Sphinx.</p>
+<p>The native change-detection tests use GoogleTest and do not need a device.
+PlatformIO environments provide the firmware and hardware-test builds.</p>
 </section>
 <section id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading">¶</a></h2>
@@ -263,7 +264,7 @@
 <ol class="arabic simple">
 <li><p>Set up the development environment using the tools below.</p></li>
 <li><p>Fork the repository and create a feature branch.</p></li>
-<li><p>Make changes, ensuring pre-commit passes.</p></li>
+<li><p>Run the relevant UI, native-test, documentation, or PlatformIO validation.</p></li>
 <li><p>Submit a pull request with a clear description.</p></li>
 </ol>
 </section>
@@ -272,11 +273,29 @@
 <ul class="simple">
 <li><p><strong>VS Code</strong>: Primary code editor. Download from <a class="reference external" href="https://code.visualstudio.com/">https://code.visualstudio.com/</a>.</p></li>
 <li><p><strong>PlatformIO</strong>: Extension for VS Code to handle Arduino ESP32 development. Install via VS Code marketplace or <a class="reference external" href="https://platformio.org/">https://platformio.org/</a>.</p></li>
-<li><p><strong>Pre-commit</strong>: Enforces code standards. Install via pip (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pre-commit</span></code>) and run <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">install</span></code> in the repo. Requires Linux/WSL on Windows.</p></li>
-<li><p><strong>GitHub CLI</strong>: For source code management. Install from <a class="reference external" href="https://cli.github.com/">https://cli.github.com/</a>.</p></li>
 <li><p><strong>Git</strong>: Version control. For Windows, use <a class="reference external" href="https://gitforwindows.org/">https://gitforwindows.org/</a>; included with macOS/Linux.</p></li>
 </ul>
+<section id="useful-commands">
+<h3>Useful commands<a class="headerlink" href="#useful-commands" title="Permalink to this heading">¶</a></h3>
+<p>Build the primary firmware target:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pio</span> <span class="n">run</span> <span class="o">-</span><span class="n">e</span> <span class="n">kegmon</span><span class="o">-</span><span class="n">esp32s3</span><span class="o">-</span><span class="n">pro</span><span class="o">-</span><span class="n">tft</span><span class="o">-</span><span class="n">sd</span>
+</pre></div>
+</div>
+<p>Run native change-detection tests:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">test</span> <span class="o">&amp;&amp;</span> <span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="n">build</span> <span class="o">&amp;&amp;</span> <span class="n">cd</span> <span class="n">build</span> <span class="o">&amp;&amp;</span> <span class="n">cmake</span> <span class="o">..</span> <span class="o">&amp;&amp;</span> <span class="n">make</span> <span class="o">&amp;&amp;</span> <span class="o">./</span><span class="n">changedetection_integration_test</span>
+</pre></div>
+</div>
+<p>Build the web UI and copy its embedded assets:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">ui</span> <span class="o">&amp;&amp;</span> <span class="n">npm</span> <span class="n">run</span> <span class="n">build</span>
+<span class="n">cd</span> <span class="o">..</span> <span class="o">&amp;&amp;</span> <span class="o">./</span><span class="n">copy_ui</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<p>Build the documentation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">src_docs</span> <span class="o">&amp;&amp;</span> <span class="n">make</span> <span class="n">html</span>
+</pre></div>
+</div>
 <p>For more details, refer to the repository’s README or issue tracker.</p>
+</section>
 </section>
 </section>
 
@@ -336,9 +355,12 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Development</a><ul>
-<li><a class="reference internal" href="#contributing-to-kegmon">Contributing to KegMon</a></li>
+<li><a class="reference internal" href="#contributing-to-kegmon2">Contributing to KegMon2</a></li>
 <li><a class="reference internal" href="#getting-started">Getting Started</a></li>
-<li><a class="reference internal" href="#required-tools">Required Tools</a></li>
+<li><a class="reference internal" href="#required-tools">Required Tools</a><ul>
+<li><a class="reference internal" href="#useful-commands">Useful commands</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -350,7 +372,7 @@
       
     </aside>
   </div>
-</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=73cda6fb"></script>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=f62554d0"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/scripts/furo.js?v=5fa4622c"></script>

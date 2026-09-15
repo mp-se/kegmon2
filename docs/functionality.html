@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Releases" href="releases.html" /><link rel="prev" title="Welcome to KegMon - Keg Level Monitor" href="index.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Releases" href="releases.html" /><link rel="prev" title="Welcome to KegMon2 - Keg Level Monitor" href="index.html" />
 
     <!-- Generated with Sphinx 7.1.2 and Furo 2024.08.06 -->
         <title>Functionality - Kegmon 2.0.0</title>
@@ -267,11 +267,17 @@
 <li><p><strong>Hardware Support for Up to 4 Scales</strong></p>
 <p>Designed to support up to 4 scales simultaneously, with each scale capable of displaying real-time statistics on an attached display, enabling monitoring of multiple kegs in a single system.</p>
 </li>
-<li><p><strong>Stable Level Detection</strong></p>
-<p>Advanced software algorithms that detect and confirm stable liquid levels in each keg, filtering out noise from movement or environmental factors for accurate readings.</p>
+<li><p><strong>Stable Level Detection and Keg Lifecycle States</strong></p>
+<p>Each scale has an independent state machine for settling, stable monitoring,
+pouring, keg absence/replacement, calibration-required, invalid readings and
+load-cell errors. A new baseline is committed only after the signal has
+settled, which avoids locking an intermediate post-pour weight.</p>
 </li>
-<li><p><strong>Pour Detection</strong></p>
-<p>Intelligent detection of pour events, tracking when beer is dispensed to log consumption and update remaining volume calculations automatically.</p>
+<li><p><strong>Pour Detection and Event History</strong></p>
+<p>Dual-filter slope analysis detects realistic downward flow, tracks the pour,
+and records completion data. Events are available in the web interface; when
+SD-card support is enabled and the card mounts, persistent CSV event history
+is also available.</p>
 </li>
 <li><p><strong>Volume Estimation</strong></p>
 <p>Calculates remaining beer volume in terms of glasses or pints, factoring in the keg’s weight, final gravity, and the pre-configured weight of an empty keg for precise inventory management.</p>
@@ -282,6 +288,10 @@
 <li><p><strong>BrewSpy Integration</strong></p>
 <p>Connects to BrewSpy to fetch and import brew data, automatically updating keg levels and beer information when batches are changed or new brews are added.</p>
 </li>
+<li><p><strong>BrewLogger and Barhelper Integrations</strong></p>
+<p>Sends keg and pour information to the configured BrewLogger endpoint and can
+publish keg information to configured Barhelper monitors.</p>
+</li>
 <li><p><strong>Brewfather Integration</strong></p>
 <p>Pulls data from Brewfather on recent brews, simplifying the import of batch details, recipes, and gravity readings for streamlined setup and tracking.</p>
 </li>
@@ -289,7 +299,8 @@
 <p>Supports over-the-air software updates directly through the web UI, ensuring the device stays current with the latest features and bug fixes without physical access.</p>
 </li>
 <li><p><strong>Temperature Sensors</strong></p>
-<p>Supports DS18B20 temperature sensors placed in each keg base, providing real-time temperature monitoring to help maintain optimal beer storage conditions.</p>
+<p>Supports DS18B20 sensors on the shared OneWire bus. A sensor ID can be
+assigned to each tap for per-keg temperature display and integrations.</p>
 </li>
 <li><p><strong>Backup and Restore of Settings</strong></p>
 <p>Allows full backup and restore of device configurations as JSON files, useful for recovery from hardware issues or replicating setups across multiple devices by editing the “id” fields to match each unit’s unique ID (available on the index page).</p>
@@ -349,7 +360,7 @@
       
     </aside>
   </div>
-</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=73cda6fb"></script>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=f62554d0"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/scripts/furo.js?v=5fa4622c"></script>

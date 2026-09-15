@@ -260,9 +260,12 @@
 <p class="admonition-title">Warning</p>
 <p>Using the web flasher erases the entire device before flashing, so back up your settings first. For upgrades, use the firmware update feature within the KegMon software.</p>
 </div>
-<section id="manual-update">
-<h3>Manual Update<a class="headerlink" href="#manual-update" title="Permalink to this heading">¶</a></h3>
-<p>When the device is in configuration mode, you can manually update the firmware. Open this URL in your web browser: <strong>http://[device-ip]/update</strong> (replace [device-ip] with your device’s IP address), then select the appropriate firmware.bin file for the version you want to install.</p>
+<section id="firmware-update-from-the-web-ui">
+<h3>Firmware Update from the Web UI<a class="headerlink" href="#firmware-update-from-the-web-ui" title="Permalink to this heading">¶</a></h3>
+<p>For normal upgrades, open the KegMon web interface and select <strong>Other &gt;
+Firmware update</strong>. The page shows the expected firmware filename; choose the
+matching <code class="docutils literal notranslate"><span class="pre">.bin</span></code> file and wait for the device to restart. This preserves the
+configuration, unlike a full erase-and-flash operation.</p>
 </section>
 </section>
 <section id="serial-monitoring">
@@ -274,7 +277,6 @@
 <span id="setup-wifi"></span><h2>WiFi Compatibility<a class="headerlink" href="#wifi-compatibility" title="Permalink to this heading">¶</a></h2>
 <p>The ESP32 has limited WiFi support and relies on older standards. Consider these guidelines for setup:</p>
 <ul class="simple">
-<li><p>Do not use spaces in your WiFi SSID or password.</p></li>
 <li><p>Only 2.4GHz bands are supported, with channels 1-13 (in 802.11 b/g/n modes).</p></li>
 <li><p>Channels should be in the 20-25 MHz range.</p></li>
 <li><p>The SSID must be visible (hidden SSIDs do not work).</p></li>
@@ -284,7 +286,8 @@
 <section id="configuring-wifi">
 <h2>Configuring WiFi<a class="headerlink" href="#configuring-wifi" title="Permalink to this heading">¶</a></h2>
 <p>After flashing, the device needs WiFi configuration. If previous software was installed, settings may already exist.</p>
-<p>To enter WiFi setup mode on a configured device, tap the reset button at least 3 times in 1-2 second intervals (not too fast or too slow).</p>
+<p>To enter WiFi setup mode on a configured device, use the board reset button
+twice within the configured double-reset window.</p>
 <p>If unconfigured, the device creates a wireless access point named <cite>GravityMon</cite> with the default password <cite>password</cite>. Connect to this AP, and the configuration page should open automatically. If not, navigate to <strong>http://192.168.4.1</strong> in your browser.</p>
 <p>Enter your desired SSID and password. WiFi settings can also be adjusted later under Device &gt; WiFi in the menu.</p>
 </section>
@@ -357,7 +360,7 @@
             <ul>
 <li><a class="reference internal" href="#">Software Installation</a><ul>
 <li><a class="reference internal" href="#gravitymon-web-flasher">GravityMon Web Flasher</a><ul>
-<li><a class="reference internal" href="#manual-update">Manual Update</a></li>
+<li><a class="reference internal" href="#firmware-update-from-the-web-ui">Firmware Update from the Web UI</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#serial-monitoring">Serial Monitoring</a></li>
@@ -375,7 +378,7 @@
       
     </aside>
   </div>
-</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=73cda6fb"></script>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=f62554d0"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/scripts/furo.js?v=5fa4622c"></script>
