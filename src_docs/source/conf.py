@@ -22,7 +22,7 @@ copyright = '2022-2026, Magnus Persson'
 author = 'Magnus Persson'
 
 # The full version, including alpha/beta/rc tags
-release = '2.0.0'
+release = '2.0.0 alfa 1'
 
 
 # -- General configuration ---------------------------------------------------

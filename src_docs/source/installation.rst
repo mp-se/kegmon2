@@ -20,10 +20,13 @@ Select the software to flash and the board manufacturer; the flasher will automa
 
   Using the web flasher erases the entire device before flashing, so back up your settings first. For upgrades, use the firmware update feature within the KegMon software.
 
-Manual Update
-*************
+Firmware Update from the Web UI
+*******************************
 
-When the device is in configuration mode, you can manually update the firmware. Open this URL in your web browser: **http://[device-ip]/update** (replace [device-ip] with your device's IP address), then select the appropriate firmware.bin file for the version you want to install.
+For normal upgrades, open the KegMon web interface and select **Other >
+Firmware update**. The page shows the expected firmware filename; choose the
+matching ``.bin`` file and wait for the device to restart. This preserves the
+configuration, unlike a full erase-and-flash operation.
 
 .. _serial_monitoring:
 
@@ -41,7 +44,6 @@ WiFi Compatibility
 
 The ESP32 has limited WiFi support and relies on older standards. Consider these guidelines for setup:
 
-* Do not use spaces in your WiFi SSID or password.
 * Only 2.4GHz bands are supported, with channels 1-13 (in 802.11 b/g/n modes).
 * Channels should be in the 20-25 MHz range.
 * The SSID must be visible (hidden SSIDs do not work).
@@ -53,7 +55,8 @@ Configuring WiFi
 
 After flashing, the device needs WiFi configuration. If previous software was installed, settings may already exist.
 
-To enter WiFi setup mode on a configured device, tap the reset button at least 3 times in 1-2 second intervals (not too fast or too slow).
+To enter WiFi setup mode on a configured device, use the board reset button
+twice within the configured double-reset window.
 
 If unconfigured, the device creates a wireless access point named `GravityMon` with the default password `password`. Connect to this AP, and the configuration page should open automatically. If not, navigate to **http://192.168.4.1** in your browser.
 
@@ -72,4 +75,3 @@ If your system supports mDNS, use the device's network name (e.g., kegmon.local)
 * Use an IP scanner or port scanner (available for Windows, macOS, or mobile) to find devices listening on port 80.
 
 Once connected to the web interface, proceed with configuration.
-
