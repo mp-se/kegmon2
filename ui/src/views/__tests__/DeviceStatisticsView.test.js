@@ -1,6 +1,10 @@
 // Mock the status store used by the view before importing the component
 vi.mock('@/modules/statusStore', () => ({
-  useStatusStore: () => ({ events: [], $state: {} })
+  useStatusStore: () => ({
+    events: [],
+    $state: {},
+    getRelativeTime: (timestampMs) => `uptime:${timestampMs}`
+  })
 }))
 
 import { shallowMount } from '@vue/test-utils'
@@ -37,7 +41,7 @@ describe('DeviceStatisticsView', () => {
     await nextTick()
     await flush()
 
-    expect(http.getJson).toHaveBeenCalledWith('api/statistics')
+    expect(http.getJson).toHaveBeenCalledWith('api/statistic')
     expect(wrapper.vm.statistics).toEqual(sample)
     expect(wrapper.vm.loaded).toBe(true)
     expect(global.disabled).toBe(false)
@@ -73,15 +77,9 @@ describe('DeviceStatisticsView', () => {
     expect(wrapper.vm.formatEventName('unknown_event')).toBe('unknown_event')
   })
 
-  it('getRelativeTime and formatEventTime produce expected outputs', () => {
-    const now = 1_000_000_000_000
-    vi.spyOn(Date, 'now').mockReturnValue(now)
+  it('formats event times using device uptime', () => {
     const wrapper = shallowMount(DeviceStatisticsView)
-    expect(wrapper.vm.getRelativeTime(now - 30 * 1000)).toBe('just now')
-    expect(wrapper.vm.getRelativeTime(now - 5 * 60 * 1000)).toBe('5m ago')
-    expect(wrapper.vm.getRelativeTime(now - 2 * 60 * 60 * 1000)).toBe('2h ago')
-    expect(wrapper.vm.getRelativeTime(now - 2 * 24 * 60 * 60 * 1000)).toBe('2d ago')
-    expect(wrapper.vm.formatEventTime(now - 2 * 60 * 1000)).toBe('2m ago')
+    expect(wrapper.vm.formatEventTime(120000)).toBe('uptime:120000')
   })
 
   it('formatEventData composes details for events', () => {
@@ -106,7 +104,7 @@ describe('DeviceStatisticsView', () => {
     global.disabled = false
     await wrapper.vm.clearStatistics()
     expect(global.disabled).toBe(false)
-    expect(http.getJson).toHaveBeenCalledWith('api/statistics/clear')
+    expect(http.getJson).toHaveBeenCalledWith('api/statistic/clear')
     wrapper.unmount()
   })
 

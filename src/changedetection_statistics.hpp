@@ -29,6 +29,10 @@
 
 enum class ChangeDetectionState;
 
+// Keep this in sync with ChangeDetectionState. The statistics header is
+// included by changedetection.hpp, so it cannot include that enum directly.
+constexpr int CHANGE_DETECTION_STATE_COUNT = 10;
+
 // Per-scale change detection statistics
 struct ChangeDetectionStatistics {
   // Pour statistics
@@ -37,6 +41,7 @@ struct ChangeDetectionStatistics {
   float avgPourVolume = 0.0f;     // liters
   float maxPourVolume = 0.0f;     // liters
   float minPourVolume = 1000.0f;  // liters
+  float lastPourVolume = 0.0f;    // liters
   uint32_t totalPourDurationMs = 0;
   float avgPourDurationMs = 0.0f;
 
@@ -48,8 +53,8 @@ struct ChangeDetectionStatistics {
 
   // State tracking
   uint32_t stateTransitions = 0;
-  uint32_t timeInStateMs[8] = {0};    // One entry per ChangeDetectionState
-  uint32_t stateEnterCount[8] = {0};  // Times entered each state
+  uint32_t timeInStateMs[CHANGE_DETECTION_STATE_COUNT] = {0};
+  uint32_t stateEnterCount[CHANGE_DETECTION_STATE_COUNT] = {0};
 
   // Stability metrics
   uint32_t stabilizationCount = 0;  // Times reached Stable state
@@ -86,6 +91,7 @@ struct ChangeDetectionStatistics {
 
     if (volumeL > maxPourVolume) maxPourVolume = volumeL;
     if (volumeL < minPourVolume) minPourVolume = volumeL;
+    lastPourVolume = volumeL;
 
     avgPourVolume = totalPourVolume / totalPours;
     avgPourDurationMs = totalPourDurationMs / totalPours;
@@ -104,14 +110,15 @@ struct ChangeDetectionStatistics {
                          uint64_t durationInPreviousStateMs) {
     stateTransitions++;
 
-    if (previousStateIndex >= 0 && previousStateIndex < 8) {
+    if (previousStateIndex >= 0 &&
+        previousStateIndex < CHANGE_DETECTION_STATE_COUNT) {
       timeInStateMs[previousStateIndex] += durationInPreviousStateMs;
       stateEnterCount[previousStateIndex]++;
     }
 
-    if (newStateIndex >= 0 && newStateIndex < 8) {
+    if (newStateIndex >= 0 && newStateIndex < CHANGE_DETECTION_STATE_COUNT) {
       // Track stabilization
-      if (newStateIndex == 3) {  // Stable state = index 3
+      if (newStateIndex == 2) {  // ChangeDetectionState::Stable
         stabilizationCount++;
         if (stabilizationCount == 1) {
           avgStabilizationTimeMs = durationInPreviousStateMs;
@@ -128,14 +135,14 @@ struct ChangeDetectionStatistics {
   }
 
   float getAvgTimeInStateMs(int stateIndex) const {
-    if (stateIndex < 0 || stateIndex >= 8) return 0.0f;
+    if (stateIndex < 0 || stateIndex >= CHANGE_DETECTION_STATE_COUNT) return 0.0f;
     if (stateEnterCount[stateIndex] == 0) return 0.0f;
     return static_cast<float>(timeInStateMs[stateIndex]) /
            stateEnterCount[stateIndex];
   }
 
   float getTotalTimeInStateSec(int stateIndex) const {
-    if (stateIndex < 0 || stateIndex >= 8) return 0.0f;
+    if (stateIndex < 0 || stateIndex >= CHANGE_DETECTION_STATE_COUNT) return 0.0f;
     return static_cast<float>(timeInStateMs[stateIndex]) / 1000.0f;
   }
 
@@ -145,6 +152,7 @@ struct ChangeDetectionStatistics {
     avgPourVolume = 0.0f;
     maxPourVolume = 0.0f;
     minPourVolume = 1000.0f;
+    lastPourVolume = 0.0f;
     totalPourDurationMs = 0;
     avgPourDurationMs = 0.0f;
 
@@ -154,7 +162,7 @@ struct ChangeDetectionStatistics {
     lastKegWeight = 0.0f;
 
     stateTransitions = 0;
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < CHANGE_DETECTION_STATE_COUNT; i++) {
       timeInStateMs[i] = 0;
       stateEnterCount[i] = 0;
     }

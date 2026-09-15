@@ -122,6 +122,7 @@ constexpr auto PARAM_EVENT_LOAD_CELL_RECOVERED = "load_cell_recovered";
 constexpr auto PARAM_EVENT_SENSOR_RECOVERED = "sensor_recovered";
 constexpr auto PARAM_EVENT_CALIBRATION_NEEDED = "calibration_needed";
 constexpr auto PARAM_EVENT_CALIBRATION_COMPLETE = "calibration_complete";
+constexpr auto PARAM_EVENT_HARDWARE_DISABLED = "hardware_disabled";
 constexpr auto PARAM_SIGNAL_REASON = "reason";
 constexpr auto PARAM_VARIANCE = "variance";
 constexpr auto PARAM_CONSECUTIVE_ERRORS = "consecutive_errors";
@@ -958,6 +959,8 @@ void KegWebHandler::queueEvent(const ChangeDetectionEvent &event) {
 
 void KegWebHandler::getRecentEvents(ChangeDetectionEvent *outEvents,
                                     size_t &count) {
+  portENTER_CRITICAL(&_eventLock);
+
   // Snapshot the count to ensure consistent read
   count = _eventCount.load();
 
@@ -970,6 +973,8 @@ void KegWebHandler::getRecentEvents(ChangeDetectionEvent *outEvents,
       outEvents[i] = _recentEvents[srcIdx];
     }
   }
+
+  portEXIT_CRITICAL(&_eventLock);
 }
 
 // Convert ChangeDetectionEvent to JSON
@@ -992,7 +997,8 @@ static void eventToJson(const ChangeDetectionEvent &event, JsonObject obj) {
         stable[PARAM_STABLE_WEIGHT] =
             serialized(String(event.stable.stableWeightKg, 4));
         WeightVolumeConverter volumeConverter(event.unitIndex);
-        float stableVolume = volumeConverter.weightToVolume(event.stable.stableWeightKg);
+        float stableVolume = volumeConverter.weightToVolume(
+            event.stable.stableWeightKg - myConfig.getKegWeight(event.unitIndex));
         stable[PARAM_STABLE_VOLUME] =
             serialized(String(stableVolume, 4));
         stable[PARAM_DURATION_MS] =
@@ -1096,6 +1102,10 @@ static void eventToJson(const ChangeDetectionEvent &event, JsonObject obj) {
 
     case ChangeDetectionEventType::CALIBRATION_COMPLETE:
       obj[PARAM_NAME] = PARAM_EVENT_CALIBRATION_COMPLETE;
+      break;
+
+    case ChangeDetectionEventType::HARDWARE_DISABLED:
+      obj[PARAM_NAME] = PARAM_EVENT_HARDWARE_DISABLED;
       break;
   }
 }

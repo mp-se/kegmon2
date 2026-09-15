@@ -42,6 +42,10 @@ enum class ChangeDetectionState {
   Disabled           // Scale hardware (ADC) not found at startup
 };
 
+static_assert(CHANGE_DETECTION_STATE_COUNT ==
+                  static_cast<int>(ChangeDetectionState::Disabled) + 1,
+              "Update CHANGE_DETECTION_STATE_COUNT when adding states");
+
 // Event types fired by change detection state machine
 enum class ChangeDetectionEventType {
   SYSTEM_STARTUP,           // System initialized/session started
@@ -147,6 +151,7 @@ struct ChangeDetectionInstance {
 
   // Timing and state tracking
   uint64_t stateEntryTimeMs = 0;
+  uint64_t lastStateDurationMs = 0;
   float stableWeight = 0.0f;
   float previousFilterValue = 0.0f;
   float accumulatedSlope = 0.0f;

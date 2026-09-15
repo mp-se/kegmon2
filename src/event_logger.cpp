@@ -135,7 +135,8 @@ void EventLogger::formatEventRow(const ChangeDetectionEvent& event,
   const char* emptyField = "";
   float stableWeight = event.stable.stableWeightKg;
   WeightVolumeConverter volumeConverter(event.unitIndex);
-  float stableVolume = volumeConverter.weightToVolume(stableWeight);
+  float stableVolume = volumeConverter.weightToVolume(
+      stableWeight - myConfig.getKegWeight(event.unitIndex));
   float prePourWeight = event.pour.prePourWeightKg;
   float postPourWeight = event.pour.postPourWeightKg;
   float pourWeight = event.pour.pourWeightKg;

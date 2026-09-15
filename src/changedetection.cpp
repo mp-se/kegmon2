@@ -55,6 +55,8 @@ const char* getEventTypeDisplayName(ChangeDetectionEventType eventType) {
       return "Calibration needed";
     case ChangeDetectionEventType::CALIBRATION_COMPLETE:
       return "Calibration complete";
+    case ChangeDetectionEventType::HARDWARE_DISABLED:
+      return "Hardware disabled";
     default:
       return "Unknown";
   }
@@ -137,6 +139,7 @@ void ChangeDetection::transitionState(UnitIndex idx,
     
     // Record state change statistics
     uint64_t durationInCurrentState = timestampMs - scale.stateEntryTimeMs;
+    scale.lastStateDurationMs = durationInCurrentState;
     _stats.recordStateChange(
         static_cast<int>(idx), static_cast<int>(scale.state),
         static_cast<int>(newState), durationInCurrentState);
@@ -197,8 +200,9 @@ void ChangeDetection::fireEvent(UnitIndex idx,
   switch (eventType) {
     case ChangeDetectionEventType::STABLE_LEVEL: {
       event.stable.stableWeightKg = scale.stableWeight;
-      event.stable.durationMs = timestampMs - scale.stateEntryTimeMs;
-      float stableVolume = converter.weightToVolume(scale.stableWeight);
+      event.stable.durationMs = scale.lastStateDurationMs;
+      float stableVolume = converter.weightToVolume(
+          scale.stableWeight - myConfig.getKegWeight(idx));
       Log.notice(F("CHGD: Scale STABLE_LEVEL - weight: %F kg, volume: %F L, duration: %d ms [%d]." CR),
                  event.stable.stableWeightKg, stableVolume, event.stable.durationMs, static_cast<int>(idx));
       break;
@@ -218,7 +222,7 @@ void ChangeDetection::fireEvent(UnitIndex idx,
       event.pour.pourWeightKg = scale.prePourWeight - scale.stableWeight;
       event.pour.pourVolumeL =
           converter.weightToVolume(event.pour.pourWeightKg);
-      event.pour.durationMs = timestampMs - scale.stateEntryTimeMs;
+      event.pour.durationMs = scale.lastStateDurationMs;
       event.pour.averageSlopeKgSec = getAverageSlope(idx);
       Log.notice(F("CHGD: Scale POUR_COMPLETED - pre: %F kg, post: %F kg, volume: %F L, duration: %d ms [%d]." CR),
                  event.pour.prePourWeightKg, event.pour.postPourWeightKg,
@@ -571,7 +575,7 @@ void ChangeDetection::firePourCompletedWithSplitting(UnitIndex idx,
   event.pour.postPourWeightKg = scale.stableWeight;
   event.pour.pourWeightKg = scale.prePourWeight - scale.stableWeight;
   event.pour.pourVolumeL = converter.weightToVolume(event.pour.pourWeightKg);
-  event.pour.durationMs = timestampMs - scale.stateEntryTimeMs;
+  event.pour.durationMs = scale.lastStateDurationMs;
   event.pour.averageSlopeKgSec = getAverageSlope(idx);
 
   // Use the multi-pour splitting logic
@@ -1006,8 +1010,7 @@ float ChangeDetection::getStableVolume(UnitIndex idx) const {
 }
 
 float ChangeDetection::getLastPourVolume(UnitIndex idx) const {
-  // Return the last/max pour volume from statistics
-  return getStatistics(idx).maxPourVolume;
+  return getStatistics(idx).lastPourVolume;
 }
 
 const char* ChangeDetection::getStateString(UnitIndex idx) const {
@@ -1030,6 +1033,8 @@ const char* ChangeDetection::getStateString(UnitIndex idx) const {
       return "LoadCellError";
     case ChangeDetectionState::CalibrationNeeded:
       return "CalibrationNeeded";
+    case ChangeDetectionState::Disabled:
+      return "Disabled";
     default:
       return "Unknown";
   }
@@ -1141,9 +1146,9 @@ void ChangeDetection::updateSignalQuality(UnitIndex idx, bool isValid,
     scale.lastErrorReason = reason;
 
     // Quality decreases with more consecutive errors (100% → 0%)
+    const int quality = 100 - (static_cast<int>(scale.consecutiveErrors) * 5);
     scale.signalQualityPercent =
-        static_cast<uint8_t>(100 - (scale.consecutiveErrors * 5));
-    if (scale.signalQualityPercent < 0) scale.signalQualityPercent = 0;
+        static_cast<uint8_t>(std::max(0, std::min(100, quality)));
 
     // Fire error event on first error (regardless of previous state)
     if (isFirstError) {

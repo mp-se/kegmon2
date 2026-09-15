@@ -194,7 +194,8 @@ export const useStatusStore = defineStore('status', {
         sensor_recovered: 'Sensor Recovered',
         calibration_needed: 'Calibration Needed',
         calibration_complete: 'Calibration Complete',
-        disabled: 'Disabled'
+        disabled: 'Disabled',
+        hardware_disabled: 'Hardware Disabled'
       }
 
       const filteredEvents = (this.events || [])

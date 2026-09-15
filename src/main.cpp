@@ -247,8 +247,11 @@ void loop() {
 
   // Consume events from change detection and queue for web status publishing
   ChangeDetectionEvent event;
-  if (myChangeDetection.getNextEvent(event)) {
-  // while (myChangeDetection.getNextEvent(event)) {
+  // Drain a bounded batch so a burst cannot overflow the producer queue while
+  // keeping the main loop responsive to Wi-Fi and the web server.
+  for (int eventsProcessed = 0;
+       eventsProcessed < 8 && myChangeDetection.getNextEvent(event);
+       ++eventsProcessed) {
     // Log event to SD card
     myEventLogger.logEvent(event);
 
@@ -268,8 +271,7 @@ void loop() {
         float tempC = myTemp.getLastTempByIdC(myConfig.getTempSensorId(event.unitIndex));
         
         // Calculate glasses from stable volume
-        WeightVolumeConverter volumeConverter(event.unitIndex);
-        float stableVolume = volumeConverter.weightToVolume(event.stable.stableWeightKg);
+        float stableVolume = myChangeDetection.getStableVolume(event.unitIndex);
         float glasses = stableVolume / myConfig.getGlassVolume(event.unitIndex);
         
         // Push keg information to integrations
@@ -291,7 +293,8 @@ void loop() {
         float tempC = myTemp.getLastTempByIdC(myConfig.getTempSensorId(event.unitIndex));
         
         // Push pour information to integrations
-        myPush.pushPourInformation(event.unitIndex, event.pour.prePourWeightKg,
+        float stableVolume = myChangeDetection.getStableVolume(event.unitIndex);
+        myPush.pushPourInformation(event.unitIndex, stableVolume,
                                    event.pour.pourVolumeL, tempC);
         
         // Push event state to Home Assistant
@@ -342,6 +345,7 @@ void loop() {
       case ChangeDetectionEventType::KEG_ABSENT_TIMEOUT:
       case ChangeDetectionEventType::SENSOR_RECOVERED:
       case ChangeDetectionEventType::CALIBRATION_COMPLETE:
+      case ChangeDetectionEventType::HARDWARE_DISABLED:
         // These events are informational; push state to Home Assistant
         myPush.getHomeAssist()->sendEventState(event.unitIndex, event.type);
         break;

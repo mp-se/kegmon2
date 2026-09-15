@@ -184,7 +184,7 @@ const getStatistics = async () => {
   logInfo('DeviceStatisticsView.getStatistics()', 'Fetching /api/statistic')
   global.disabled = true
   try {
-    const json = await http.getJson('api/statistics')
+    const json = await http.getJson('api/statistic')
     statistics.value = json
     global.disabled = false
     loaded.value = true
@@ -199,7 +199,7 @@ const clearStatistics = async () => {
   logInfo('DeviceStatisticsView.clearStatistics()', 'Sending /api/statistic/clear')
   global.disabled = true
   try {
-    await http.getJson('api/statistics/clear')
+    await http.getJson('api/statistic/clear')
     global.disabled = false
   } catch (err) {
     logError('DeviceStatisticsView.clearStatistics()', err)
@@ -223,29 +223,16 @@ const eventNameMap = {
   sensor_recovered: 'Sensor Recovered',
   calibration_needed: 'Calibration Needed',
   calibration_complete: 'Calibration Complete',
-  disabled: 'Disabled'
+  disabled: 'Disabled',
+  hardware_disabled: 'Hardware Disabled'
 }
 
 const formatEventName = (name) => {
   return eventNameMap[name] || name
 }
 
-const getRelativeTime = (timestamp_ms) => {
-  const now = Date.now()
-  const diff = now - timestamp_ms
-  const seconds = Math.floor(diff / 1000)
-  const minutes = Math.floor(seconds / 60)
-  const hours = Math.floor(minutes / 60)
-  const days = Math.floor(hours / 24)
-
-  if (seconds < 60) return 'just now'
-  if (minutes < 60) return `${minutes}m ago`
-  if (hours < 24) return `${hours}h ago`
-  return `${days}d ago`
-}
-
 const formatEventTime = (timestamp_ms) => {
-  return getRelativeTime(timestamp_ms)
+  return status.getRelativeTime(timestamp_ms)
 }
 
 const formatEventData = (event) => {
