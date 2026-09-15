@@ -23,7 +23,7 @@
 <template>
   <div class="container">
     <p></p>
-    <p class="h3">About - Kegmon</p>
+    <p class="h3">About - Kegmon2</p>
     <hr />
 
     <p class="fw-normal">

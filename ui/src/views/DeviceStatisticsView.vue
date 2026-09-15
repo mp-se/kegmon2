@@ -181,7 +181,7 @@ onUnmounted(() => {
 
 const getStatistics = async () => {
   global.clearMessages()
-  logInfo('DeviceStatisticsView.getStatistics()', 'Fetching /api/statistics')
+  logInfo('DeviceStatisticsView.getStatistics()', 'Fetching /api/statistic')
   global.disabled = true
   try {
     const json = await http.getJson('api/statistics')
@@ -196,7 +196,7 @@ const getStatistics = async () => {
 
 const clearStatistics = async () => {
   global.clearMessages()
-  logInfo('DeviceStatisticsView.clearStatistics()', 'Sending /api/statistics/clear')
+  logInfo('DeviceStatisticsView.clearStatistics()', 'Sending /api/statistic/clear')
   global.disabled = true
   try {
     await http.getJson('api/statistics/clear')
