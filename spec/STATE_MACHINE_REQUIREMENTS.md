@@ -25,11 +25,18 @@ If a scale is in the **DISABLED** state, all global conditions and state machine
 **IMPORTANT: Filter Warm-up Grace Period**
 Global conditions DO NOT apply during IDLE state (first 2 seconds). This allows filters (Kalman, EMA) to initialize and converge without false error triggers from startup transients. Only basic weight validity checks apply in IDLE. Once the system transitions OUT of IDLE to SETTLING, all global conditions become active and remain active for all subsequent states.
 
-### 1. **Signal Quality Critical** (Exit to LOAD_CELL_ERROR)
+### 1. **Scale Becomes Uncalibrated** (Exit to CALIBRATION_NEEDED)
+   - Condition: `scaleFactor == 0.0 OR scaleFactor becomes invalid`
+   - Action: Transition to CALIBRATION_NEEDED
+   - Fire: CALIBRATION_NEEDED event
+   - **Priority: HIGHEST** - cannot process readings without calibration
+
+### 2. **Signal Quality Critical** (Exit to LOAD_CELL_ERROR)
    - Condition: `signalQualityPercent < 20 OR consecutiveErrors >= 10`
    - Action: Transition to LOAD_CELL_ERROR
    - Fire: LOAD_CELL_ERROR event with error reason details
-   - **Priority: HIGHEST** - sensor health check comes before all else
+   - **Priority: HIGH** - sensor health check
+   - **Except**: If already in CALIBRATION_NEEDED (stay there)
    
    **Signal Quality Calculation:**
    ```
@@ -41,11 +48,12 @@ Global conditions DO NOT apply during IDLE state (first 2 seconds). This allows 
    - **TIMEOUT**: HX711 not responding for X ms → enter immediately (Severity: Critical)
    - **NAN_VALUE**: Reading is NaN (invalid float) → enter immediately (Severity: Critical)
    - **STUCK_VALUE**: Same value repeated (variance = 0 for 20+ reads) → enter after 5+ consecutive (Severity: Critical)
-   - **CALIBRATION_INVALID**: ScaleFactor = 0 or invalid offset → enter immediately (Severity: Critical)
    - **PHANTOM_SPIKE**: Single-read weight change > maxSingleReadChangeKg (e.g., > 0.5kg) → counts as error, contributes to quality score (Severity: High)
    - **Quality Threshold**: `signalQualityPercent < 20` (≥4 consecutive errors, 95% recent reads bad) → enter when crossed
    - **Error Accumulation**: `consecutiveErrors >= 10` (10+ bad reads in a row) → enter when crossed
    
+   **Calibration Note**: Lack of calibration (`scaleFactor == 0`) is NOT treated as a signal error and does not affect `signalQualityPercent` or `consecutiveErrors`. This ensures a non-calibrated scale remains in the `CALIBRATION_NEEDED` state rather than showing a generic hardware error.
+
    **Recovery Conditions (Exit from LOAD_CELL_ERROR):**
    - Both conditions must be met:
      1. `signalQualityPercent > 80` (fewer than 4 errors in recent reads)
@@ -402,7 +410,7 @@ A weight is "stabilized" when the Kalman filter slope remains within acceptable 
 | **STUCK_VALUE** | Sensor frozen at one value, mechanical jam | No | Requires physical intervention |
 | **PHANTOM_SPIKE** | Unexplained large jump between reads (> 0.5kg), EMI artifact, loose connection | Yes | Check wiring, shield from EMI, restart |
 | **EXCESSIVE_NOISE** | Electromagnetic interference, bad power supply | Yes | Shield wiring, check PSU |
-| **CALIBRATION_INVALID** | ScaleFactor = 0 or offset not set | No | Requires recalibration |
+| CALIBRATION_INVALID | ScaleFactor = 0 or offset not set | No | This is CALIBRATION_NEEDED, not LoadCellError |
 
 **Note on AvgSlope Logging:** When firing pour-related events (POURING, POUR_COMPLETED), the `AvgSlope` CSV field should use the **Kalman filter slope** for consistency. The Kalman filter provides the stable, noise-reduced slope suitable for historical analysis. EMA slope is used internally for fast detection but not logged.
 

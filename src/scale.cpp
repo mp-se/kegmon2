@@ -1,25 +1,23 @@
 /*
-MIT License
-
-Copyright (c) 2021-2026 Magnus
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+ * KegMon
+ * Copyright (c) 2022-2026 Magnus
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Alternatively, this software may be used under the terms of a
+ * commercial license. See LICENSE_COMMERCIAL for details.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
  */
 #include <changedetection.hpp>
 #include <kegpush.hpp>
@@ -113,8 +111,23 @@ ScaleReadingResult Scale::read(UnitIndex idx) {
   if (myConfig.getScaleFactor(idx) == FACTOR_UNCALIBRATED ||
       myConfig.getScaleOffset(idx) == 0) {  // Not initialized
     // Log.verbose(F("SCAL: HX711 has no configuration [%d]." CR), idx);
+    // NOTE: We do NOT report this as a signal quality error via updateSignalQuality anymore.
+    // This allows the state machine to handle the CALIBRATION_NEEDED state cleanly.
+    return ScaleReadingResult::createInvalidResult();
+  }
+
+  // HX711::read() blocks on "while (digitalRead(dataPin) == HIGH)" with no
+  // timeout, so a disconnected/miswired sensor never becomes ready and would
+  // hang this call forever - freezing the shared scale task for every scale,
+  // not just this one. Bound the wait so one bad sensor can't take the rest
+  // down with it.
+  constexpr uint32_t READY_TIMEOUT_MS = 200;
+  if (!_hxScale[idx]->wait_ready_timeout(READY_TIMEOUT_MS, 1)) {
+    Log.error(F("SCAL: HX711 not ready within %d ms, skipping read [%d]." CR),
+              READY_TIMEOUT_MS, idx);
     myChangeDetection.updateSignalQuality(
-        idx, false, SignalErrorReason::CALIBRATION_INVALID, 0.0f, millis());
+        idx, false, SignalErrorReason::TIMEOUT, 0.0f, millis());
+    _stats.recordReading(static_cast<int>(idx), NAN, false, millis());
     return ScaleReadingResult::createInvalidResult();
   }
 
@@ -300,10 +313,6 @@ uint8_t Scale::detectSamplingRate(UnitIndex idx) {
   Log.notice(F("SCAL: [%d] detecting sampling rate (attempt %d/3)." CR),
              idx_int, attempt);
 
-  // Count pin transitions to estimate sampling rate
-  // At 10 SPS: ~10 transitions per second
-  // At 80 SPS: ~80 transitions per second
-
   const uint32_t SAMPLE_TIME_MS = 500;  // Sample for 500ms
   const uint32_t TRANSITION_THRESHOLD =
       25;  // ~12.5 transitions per 500ms = 25/1000ms threshold
@@ -325,10 +334,21 @@ uint8_t Scale::detectSamplingRate(UnitIndex idx) {
   Log.notice(F("SCAL: [%d] transitions=%d in %d ms." CR), idx_int,
              transition_count, SAMPLE_TIME_MS);
 
+  // A live sensor toggles at least a few times in 500ms even at 10 SPS
+  // (~5 ready/not-ready cycles = ~10 edges). Zero transitions means the
+  // sensor isn't communicating at all - report failure (0) so the caller's
+  // retry logic actually retries
+  if (transition_count == 0) {
+    Log.notice(F("SCAL: [%d] no transitions detected, sensor not responding."
+                 CR),
+               idx_int);
+    return 0;
+  }
+
   // Determine rate based on transition count
   // 10 SPS = ~10 transitions per second = ~5 in 500ms
   // 80 SPS = ~80 transitions per second = ~40 in 500ms
-  uint8_t detected_rate = 0;
+  uint8_t detected_rate;
 
   if (transition_count < TRANSITION_THRESHOLD) {
     detected_rate = 10;
@@ -341,10 +361,8 @@ uint8_t Scale::detectSamplingRate(UnitIndex idx) {
   }
 
   _detectedSamplingRate[idx_int] = detected_rate;
-  if (detected_rate > 0) {
-    Log.notice(F("SCAL: [%d] Sampling rate = %d sps." CR), idx_int,
-               detected_rate);
-  }
+  Log.notice(F("SCAL: [%d] Sampling rate = %d sps." CR), idx_int,
+             detected_rate);
 
   return detected_rate;
 }

@@ -11,7 +11,7 @@ def after_build(source, target, env):
     print( "Executing custom step " )
     dir    = env.GetLaunchDir()
     name   = env.get( "PIOENV" )
-    
+
     if name == "kegmon-esp32s3-pro-tft-sd" :
         target = dir + "/bin/firmware-32s3pro.bin"
         source = dir + "/.pio/build/" + name + "/firmware.bin"
@@ -23,5 +23,33 @@ def after_build(source, target, env):
         print( "Copy file : " + source + " -> " + target )
         shutil.copyfile( source, target )
 
-print( "Adding custom build step (copy firmware): ")
-env.AddPostAction("buildprog", after_build)
+    if name == "kegmon-esp32s3-pro-tft-9341-sd" :
+        target = dir + "/bin/firmware-32s3pro-9341.bin"
+        source = dir + "/.pio/build/" + name + "/firmware.bin"
+        print( "Copy file : " + source + " -> " + target )
+        shutil.copyfile( source, target )
+
+        target = dir + "/bin/partition-32s3pro.bin"
+        source = dir + "/.pio/build/" + name + "/partitions.bin"
+        print( "Copy file : " + source + " -> " + target )
+        shutil.copyfile( source, target )
+
+    if name == "kegmon-esp32s3-pro-tft-9488-sd" :
+        target = dir + "/bin/firmware-32s3pro-9488.bin"
+        source = dir + "/.pio/build/" + name + "/firmware.bin"
+        print( "Copy file : " + source + " -> " + target )
+        shutil.copyfile( source, target )
+
+        target = dir + "/bin/partition-32s3pro.bin"
+        source = dir + "/.pio/build/" + name + "/partitions.bin"
+        print( "Copy file : " + source + " -> " + target )
+        shutil.copyfile( source, target )
+
+print("Adding custom build step (copy firmware):")
+# Target the generated binary directly. Keep this as a SCons Action rather
+# than PlatformIO's VerboseAction: PIOVERBOSE unwraps VerboseAction back to a
+# bare callback, which leaves the command text as Null in SCons 4.11.
+env.AddPostAction(
+    "$BUILD_DIR/${PROGNAME}.bin",
+    env.Action(after_build, "Copying firmware artifacts"),
+)

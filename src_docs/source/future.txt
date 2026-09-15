@@ -1,0 +1,59 @@
+* ILI9488 based displays (480x320) - 3.5 inch TFT
+
+The lolin cable has the following pinout in the SH1.0 connector where pin 1 is closest to the RST button:
+
+.. list-table:: Display Pinout
+   :widths: 25 25 25
+   :header-rows: 1
+
+   * - Cable color
+     - ESP32s3 PRO connector
+     - ILI9488 Display connector
+   * - BLACK 
+     - TFT_LED
+     - LED
+   * - RED 
+     - GND
+     - GND
+   * - WHITE 
+     - TFT_RST
+     - RESET
+   * - YELLOW 
+     - TFT_DC
+     - D/C
+   * - ORANGE
+     - MOSI
+     - SDO/MOSI
+   * - GREEN
+     - MISO
+     - SDI
+   * - BLUE
+     - SCK
+     - SCK
+   * - PURPLE
+     - +3.3V
+     - VCC
+   * - GREY 
+     - TFT_CS
+     - CS
+   * - BROWN
+     - TS_CS
+     - T_CS
+
+TODO
+
+
+T_IRQ
+T_OUT
+T_DN
+T_CS
+T_CLK
+SDO
+LED
+SCK
+SDI
+D/C
+RESET
+CS
+GND
+VCC
