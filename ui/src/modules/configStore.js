@@ -53,7 +53,9 @@ export const useConfigStore = defineStore('config', {
       brewfather_apikey: '',
       brewfather_userkey: '',
       brewlogger_url: '',
+      brewgraph_url: '',
       brewspy_tokens: ['', '', '', ''],
+      brewgraph_tokens: ['', '', '', ''],
       barhelper_apikey: '',
       barhelper_monitors: ['', '', '', ''],
       // Push - Generic
@@ -233,7 +235,12 @@ export const useConfigStore = defineStore('config', {
         this.brewfather_apikey = json.brewfather_apikey
         this.brewfather_userkey = json.brewfather_userkey
         this.brewlogger_url = json.brewlogger_url
+        this.brewgraph_url = json.brewgraph_url
         this.brewspy_tokens = (json.brewspy_tokens || this.brewspy_tokens).slice(0, maxKegs)
+        this.brewgraph_tokens = (json.brewgraph_tokens || this.brewgraph_tokens).slice(
+          0,
+          maxKegs
+        )
         this.barhelper_apikey = json.barhelper_apikey
         this.barhelper_monitors = (json.barhelper_monitors || this.barhelper_monitors).slice(
           0,

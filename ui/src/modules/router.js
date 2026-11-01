@@ -42,6 +42,7 @@ import IntBrewfatherView from '@/views/IntBrewfatherView.vue'
 import IntBrewspyView from '@/views/IntBrewspyView.vue'
 import IntBarhelperView from '@/views/IntBarhelperView.vue'
 import IntBrewloggerView from '@/views/IntBrewloggerView.vue'
+import IntBrewgraphView from '@/views/IntBrewgraphView.vue'
 import AboutView from '@/views/AboutView.vue'
 import BackupView from '@/views/BackupView.vue'
 import FirmwareView from '@/views/FirmwareView.vue'
@@ -140,6 +141,11 @@ const routes = [
     path: '/integration/brewlogger',
     name: 'integration-brewlogger',
     component: IntBrewloggerView
+  },
+  {
+    path: '/integration/brewgraph',
+    name: 'integration-brewgraph',
+    component: IntBrewgraphView
   },
   {
     path: '/other/support',
@@ -262,6 +268,10 @@ const items = ref([
       {
         label: 'Brewlogger',
         path: '/integration/brewlogger'
+      },
+      {
+        label: 'BrewGraph',
+        path: '/integration/brewgraph'
       },
       {
         label: 'Brewspy',

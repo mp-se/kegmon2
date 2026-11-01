@@ -41,11 +41,17 @@ void KegConfig::createJson(JsonObject& doc) const {
   doc[PARAM_BREWFATHER_APIKEY] = getBrewfatherApiKey();
   doc[PARAM_BREWFATHER_USERKEY] = getBrewfatherUserKey();
   doc[PARAM_BREWLOGGER_URL] = getBrewLoggerUrl();
+  doc[PARAM_BREWGRAPH_URL] = getBrewGraphUrl();
 
   // Brewspy tokens as array
   JsonArray brewspy = doc[PARAM_BREWSPY_TOKENS].to<JsonArray>();
   for (int i = 0; i < MAX_SCALES; i++) {
     brewspy.add(getBrewspyToken(static_cast<UnitIndex>(i)));
+  }
+
+  JsonArray brewgraph = doc[PARAM_BREWGRAPH_TOKENS].to<JsonArray>();
+  for (int i = 0; i < MAX_SCALES; i++) {
+    brewgraph.add(getBrewGraphToken(static_cast<UnitIndex>(i)));
   }
 
   doc[PARAM_BARHELPER_APIKEY] = getBarhelperApiKey();
@@ -107,6 +113,9 @@ void KegConfig::parseJson(JsonObject& doc) {
   if (!doc[PARAM_BREWLOGGER_URL].isNull())
     setBrewLoggerUrl(doc[PARAM_BREWLOGGER_URL]);
 
+  if (!doc[PARAM_BREWGRAPH_URL].isNull())
+    setBrewGraphUrl(doc[PARAM_BREWGRAPH_URL]);
+
   // Load brewspy tokens from array
   if (!doc[PARAM_BREWSPY_TOKENS].isNull()) {
     JsonArray brewspy = doc[PARAM_BREWSPY_TOKENS].as<JsonArray>();
@@ -114,6 +123,16 @@ void KegConfig::parseJson(JsonObject& doc) {
          i++) {
       if (!brewspy[i].isNull()) {
         setBrewspyToken(static_cast<UnitIndex>(i), brewspy[i].as<String>());
+      }
+    }
+  }
+
+  if (!doc[PARAM_BREWGRAPH_TOKENS].isNull()) {
+    JsonArray brewgraph = doc[PARAM_BREWGRAPH_TOKENS].as<JsonArray>();
+    for (int i = 0; i < MAX_SCALES && i < static_cast<int>(brewgraph.size());
+         i++) {
+      if (!brewgraph[i].isNull()) {
+        setBrewGraphToken(static_cast<UnitIndex>(i), brewgraph[i].as<String>());
       }
     }
   }

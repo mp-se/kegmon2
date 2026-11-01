@@ -115,6 +115,15 @@
           </BsCard>
         </div>
 
+        <div
+          class="col-md-4"
+          v-if="status.brewgraph && (config.brewgraph_tokens || []).some((token) => token != '')"
+        >
+          <BsCard header="Push" color="secondary" title="BrewGraph">
+            <p class="text-center">{{ pushBrewGraph }}</p>
+          </BsCard>
+        </div>
+
         <div class="col-md-4">
           <BsCard header="Device" title="WIFI">
             <p class="text-center">{{ status.rssi }} dBm - {{ status.wifi_ssid }}</p>
@@ -222,6 +231,19 @@ const pushBrewLogger = computed(() => {
       new Number(status.brewlogger.push_age / 1000).toFixed(0) +
       's ago, ' +
       (status.brewlogger.push_status ? 'Success' : 'Failed, error ' + status.brewlogger.push_code)
+    )
+  }
+
+  return 'Not updated'
+})
+
+const pushBrewGraph = computed(() => {
+  if (status.brewgraph?.push_used) {
+    return (
+      'Updated ' +
+      new Number(status.brewgraph.push_age / 1000).toFixed(0) +
+      's ago, ' +
+      (status.brewgraph.push_status ? 'Success' : 'Failed, error ' + status.brewgraph.push_code)
     )
   }
 

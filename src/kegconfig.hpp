@@ -26,6 +26,7 @@
 #include <main.hpp>
 
 constexpr auto PARAM_BREWLOGGER_URL = "brewlogger_url";
+constexpr auto PARAM_BREWGRAPH_URL = "brewgraph_url";
 constexpr auto PARAM_BREWFATHER_USERKEY = "brewfather_userkey";
 constexpr auto PARAM_BREWFATHER_APIKEY = "brewfather_apikey";
 constexpr auto PARAM_BARHELPER_APIKEY = "barhelper_apikey";
@@ -37,6 +38,7 @@ constexpr auto PARAM_VOLUME_UNIT = "volume_unit";
 
 // JSON array field names for per-scale configuration
 constexpr auto PARAM_BREWSPY_TOKENS = "brewspy_tokens";
+constexpr auto PARAM_BREWGRAPH_TOKENS = "brewgraph_tokens";
 constexpr auto PARAM_BARHELPER_MONITORS = "barhelper_monitors";
 constexpr auto PARAM_SCALES = "scales";
 constexpr auto PARAM_BEERS = "beers";
@@ -106,6 +108,8 @@ class KegConfig : public BaseConfig {
                                           "Kegmon TAP 3", "Kegmon TAP 4"};
 
   String _brewLoggerUrl = "";
+  String _brewGraphUrl = "";
+  String _brewGraphToken[MAX_SCALES] = {"", "", "", ""};
 
   DisplayLayoutType _displayLayout = DisplayLayoutType::Default;
   TempSensorType _tempSensor = TempSensorType::SensorDS18B20;
@@ -167,6 +171,20 @@ class KegConfig : public BaseConfig {
   const char* getBrewLoggerUrl() const { return _brewLoggerUrl.c_str(); }
   void setBrewLoggerUrl(String s) {
     _brewLoggerUrl = s;
+    _saveNeeded = true;
+  }
+
+  const char* getBrewGraphUrl() const { return _brewGraphUrl.c_str(); }
+  void setBrewGraphUrl(String s) {
+    _brewGraphUrl = s;
+    _saveNeeded = true;
+  }
+
+  const char* getBrewGraphToken(UnitIndex idx) const {
+    return _brewGraphToken[idx].c_str();
+  }
+  void setBrewGraphToken(UnitIndex idx, String s) {
+    _brewGraphToken[idx] = s;
     _saveNeeded = true;
   }
 

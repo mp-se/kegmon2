@@ -296,7 +296,9 @@ void loop() {
         // Push pour information to integrations
         float stableVolume = myChangeDetection.getStableVolume(event.unitIndex);
         myPush.pushPourInformation(event.unitIndex, stableVolume,
-                                   event.pour.pourVolumeL, tempC);
+                                   event.pour.pourVolumeL,
+                                   static_cast<uint32_t>(event.timestampMs),
+                                   false, tempC);
         
         // Push event state to Home Assistant
         myPush.getHomeAssist()->sendEventState(event.unitIndex, event.type);

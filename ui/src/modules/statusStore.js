@@ -60,6 +60,7 @@ export const useStatusStore = defineStore('status', {
       ha: {},
       brewspy: {},
       brewlogger: {},
+      brewgraph: {},
       barhelper: {},
       sd_mounted: false
     }
@@ -146,6 +147,8 @@ export const useStatusStore = defineStore('status', {
         if (Object.prototype.hasOwnProperty.call(json, 'barhelper')) this.barhelper = json.barhelper
         if (Object.prototype.hasOwnProperty.call(json, 'brewlogger'))
           this.brewlogger = json.brewlogger
+        if (Object.prototype.hasOwnProperty.call(json, 'brewgraph'))
+          this.brewgraph = json.brewgraph
 
         // Parse events array
         this.events = json.recent_events || []

@@ -25,13 +25,15 @@
 #include <utils.hpp>
 
 void KegPushHandler::pushPourInformation(UnitIndex idx, float stableVol,
-                                         float pourVol, float tempC,
-                                         bool isLoop) {
+                                         float pourVol, uint32_t eventTimeMs,
+                                         bool isLoop, float temperature) {
   if (!isLoop)  // Limit calls to brewspy
-    _brewspy->sendPourInformation(idx, pourVol, tempC);
+    _brewspy->sendPourInformation(idx, pourVol, temperature);
 
-  _ha->sendPourInformation(idx, pourVol, tempC);
-  _brewLogger->sendPourInformation(idx, pourVol, stableVol, tempC);
+  _ha->sendPourInformation(idx, pourVol, temperature);
+  _brewLogger->sendPourInformation(idx, pourVol, stableVol, temperature);
+  _brewGraph->sendPourInformation(idx, pourVol, stableVol, eventTimeMs,
+                                  temperature);
 }
 
 void KegPushHandler::pushKegInformation(UnitIndex idx, float stableVol,
@@ -43,6 +45,7 @@ void KegPushHandler::pushKegInformation(UnitIndex idx, float stableVol,
   _ha->sendTapInformation(idx, stableVol, glasses, tempC);
   _barhelper->sendKegInformation(idx, stableVol, tempC);
   _brewLogger->sendKegInformation(idx, stableVol, tempC);
+  _brewGraph->sendKegInformation(idx, stableVol, tempC);
 }
 
 // EOF

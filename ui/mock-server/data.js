@@ -32,6 +32,7 @@ export var configData = {
   // Hardware
   ota_url: "",
   brewlogger_url: "http://192.168.0.24",
+  brewgraph_url: "http://localhost:8080",
   // Wifi
   wifi_portal_timeout: 120,
   wifi_connect_timeout: 20,
@@ -44,6 +45,7 @@ export var configData = {
   brewfather_apikey: "1",
   brewfather_userkey: "2",
   brewspy_tokens: ["2", "3", "4", "1"],
+  brewgraph_tokens: ["mock-token-1", "mock-token-2", "mock-token-3", "mock-token-4"],
   barhelper_apikey: 'sdfsdfds',
   barhelper_monitors: ["Monitor 1", "Monitor 2", "Monitor 3", "Monitor 4"],
   // Push - Http Post 1
@@ -233,6 +235,13 @@ export var statusData = {
     push_age: 30568282,
     push_status: false,
     push_code: 0,
+    push_response: "",
+    push_used: false
+  },
+  brewgraph: {
+    push_age: 0,
+    push_status: true,
+    push_code: 200,
     push_response: "",
     push_used: false
   },

@@ -135,6 +135,24 @@
                 &nbsp;Fetch from BrewLogger</button
               >&nbsp;
             </template>
+            <template
+              v-if="config.brewgraph_url != '' && (config.brewgraph_tokens || [])[index] != ''"
+            >
+              <button
+                @click="fetchBrewGraph(index + 1)"
+                type="button"
+                class="btn btn-secondary w-2 m-2"
+                :disabled="global.disabled"
+              >
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                  :hidden="!global.disabled"
+                ></span>
+                &nbsp;Fetch from BrewGraph
+              </button>
+            </template>
             <template v-if="config.brewspy_tokens[index] != ''">
               <button
                 @click="fetchBrewspy(index + 1)"
@@ -349,6 +367,30 @@ const fetchBrewspy = async (tap) => {
   } catch (err) {
     logError('TapsBeerView.fetchBrewspy()', err)
     global.messageError = 'Failed to fetch data from brewspy'
+  } finally {
+    global.disabled = false
+  }
+}
+
+const fetchBrewGraph = async (tap) => {
+  logInfo('TapsBeerView.fetchBrewGraph()', tap)
+
+  global.disabled = true
+  const tapIndex = tap - 1
+
+  try {
+    const res = await http.postJson('api/brewgraph/beer', { tap })
+    if (!res.ok) throw new Error(`Request failed with status ${res.status}`)
+    const json = await res.json()
+    if (!json.name) throw new Error('BrewGraph returned no beer name')
+
+    config.beers[tapIndex].beer_name = json.name
+    config.beers[tapIndex].beer_abv = json.abv || 0
+    config.beers[tapIndex].beer_ibu = json.ibu || 0
+    config.beers[tapIndex].beer_ebc = json.ebc || 0
+  } catch (err) {
+    logError('TapsBeerView.fetchBrewGraph()', err)
+    global.messageError = 'Failed to fetch beer information from BrewGraph'
   } finally {
     global.disabled = false
   }

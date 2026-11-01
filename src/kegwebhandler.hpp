@@ -59,6 +59,7 @@ class KegWebHandler : public BaseWebServer {
   void webStatistic(AsyncWebServerRequest *request);
   void webStatisticClear(AsyncWebServerRequest *request);
   void webHandleBrewspy(AsyncWebServerRequest *request, JsonVariant &json);
+  void webHandleBrewGraph(AsyncWebServerRequest *request, JsonVariant &json);
   void webHandleFactoryDefaults(AsyncWebServerRequest *request);
   void webHandleSecureDigital(AsyncWebServerRequest *request,
                               JsonVariant &json);

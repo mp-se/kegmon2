@@ -12,16 +12,21 @@ Welcome to KegMon2 - Keg Level Monitor
 Introduction
 ============
 
-KegMon is an open-source keg monitoring system designed for homebrewers to track beer levels, pours, and environmental conditions in real-time. The software is tailored to personal needs and integrates with popular services like Brewfather, BrewSpy, and Home Assistant. Suggestions for additional integrations are welcome—feel free to raise requests on GitHub.
+KegMon2 is an open-source keg monitoring system for tracking beer levels,
+pours, and scale conditions. It supports up to four scales on the Lolin
+ESP32-S3 PRO and provides a TFT display and browser-based interface.
+Integrations include Home Assistant over MQTT, Brewfather, BrewSpy, BrewLogger,
+BrewGraph, Barhelper, and InfluxDB v2; their supported data flows differ.
 
 The system features two primary interfaces: a graphical TFT display on the device and a web-based interface accessible from any browser. It uses advanced filtering algorithms to compensate for the unpredictability of inexpensive load cells, ensuring stable and accurate readings.
 
 To detect level changes, KegMon employs a dual-filter approach: a fast filter triggers the system into a "pouring" state upon initial weight changes, while slower filters validate the event by measuring the weight drop per second (slope). This helps distinguish genuine pours from minor fluctuations.
 
-The system can handle multiple consecutive pours by stabilizing readings and
-splitting larger pours using the configured glass size. It supports up to four
-kegs and disables a scale for the session when its HX711 is not found at
-startup.
+The per-scale state machine detects pouring from weight-slope changes and waits
+for the load to settle before committing a new stable baseline. It distinguishes
+events such as keg removal/replacement, invalid weight, load-cell errors, and
+calibration problems. A scale whose HX711 is not detected at startup is disabled
+for that session. The currently implemented firmware supports up to four scales.
 
 The v2.0.0 update is backward-compatible with scales from previous versions, requiring only a controller upgrade. The project includes:
 

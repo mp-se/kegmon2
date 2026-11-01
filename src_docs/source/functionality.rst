@@ -45,7 +45,9 @@ KegMon is a comprehensive keg monitoring system designed for homebrewers, provid
 
 * **Home Assistant Integration**
 
-  Seamlessly integrates with Home Assistant for automated data export, allowing users to view current beer selections, last pour details, remaining volume, and other metrics within their smart home dashboard.
+  Publishes scale readings and state transitions over MQTT, including entering
+  the pouring state and other supported state events. Configure the broker
+  under **Integrations → Home Assistant**.
 
 * **BrewSpy Integration**
 
@@ -56,9 +58,15 @@ KegMon is a comprehensive keg monitoring system designed for homebrewers, provid
   Sends keg and pour information to the configured BrewLogger endpoint and can
   publish keg information to configured Barhelper monitors.
 
+* **BrewGraph Integration**
+
+  Sends per-keg volume and pour updates to BrewGraph and can fetch beer
+  metadata for the tap list. Configure the base URL and a token for each scale.
+
 * **Brewfather Integration**
 
-  Pulls data from Brewfather on recent brews, simplifying the import of batch details, recipes, and gravity readings for streamlined setup and tracking.
+  Fetches recent brews for selection and beer metadata import. Available data
+  depends on the Brewfather response and configured credentials.
 
 * **Easy Software Updates**
 

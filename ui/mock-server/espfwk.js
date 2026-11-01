@@ -172,6 +172,21 @@ export function registerEspFwk(app) {
     res.send(statusData)
   })
 
+  app.post('/api/brewgraph/beer', (req, res) => {
+    const tap = Number(req.body.tap)
+    if (tap < 1 || tap > 4) {
+      res.status(400).send({ error: 'Invalid tap' })
+      return
+    }
+
+    res.send({
+      name: `Mock BrewGraph Keg ${tap}`,
+      abv: 5 + tap / 10,
+      ibu: 20 + tap,
+      ebc: 8 + tap
+    })
+  })
+
   app.get('/api/feature', (req, res) => {
     console.log('GET: /api/feature')
     /*
