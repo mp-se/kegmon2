@@ -283,7 +283,9 @@ is also available.</p>
 <p>Calculates remaining beer volume in terms of glasses or pints, factoring in the keg’s weight, final gravity, and the pre-configured weight of an empty keg for precise inventory management.</p>
 </li>
 <li><p><strong>Home Assistant Integration</strong></p>
-<p>Seamlessly integrates with Home Assistant for automated data export, allowing users to view current beer selections, last pour details, remaining volume, and other metrics within their smart home dashboard.</p>
+<p>Publishes scale readings and state transitions over MQTT, including entering
+the pouring state and other supported state events. Configure the broker
+under <strong>Integrations → Home Assistant</strong>.</p>
 </li>
 <li><p><strong>BrewSpy Integration</strong></p>
 <p>Connects to BrewSpy to fetch and import brew data, automatically updating keg levels and beer information when batches are changed or new brews are added.</p>
@@ -292,8 +294,13 @@ is also available.</p>
 <p>Sends keg and pour information to the configured BrewLogger endpoint and can
 publish keg information to configured Barhelper monitors.</p>
 </li>
+<li><p><strong>BrewGraph Integration</strong></p>
+<p>Sends per-keg volume and pour updates to BrewGraph and can fetch beer
+metadata for the tap list. Configure the base URL and a token for each scale.</p>
+</li>
 <li><p><strong>Brewfather Integration</strong></p>
-<p>Pulls data from Brewfather on recent brews, simplifying the import of batch details, recipes, and gravity readings for streamlined setup and tracking.</p>
+<p>Fetches recent brews for selection and beer metadata import. Available data
+depends on the Brewfather response and configured credentials.</p>
 </li>
 <li><p><strong>Easy Software Updates</strong></p>
 <p>Supports over-the-air software updates directly through the web UI, ensuring the device stays current with the latest features and bug fixes without physical access.</p>

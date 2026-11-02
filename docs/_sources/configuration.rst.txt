@@ -42,23 +42,33 @@ Calibrate your scales in three easy steps for accurate weight measurements.
 * **STEP 2 - Calculate factor**: Place an object of known weight on the scale and enter its weight. The software calculates the calibration factor.
 * **STEP 3 - Validate**: Place another object of known weight and verify the reading. If accurate, calibration is complete.
 
-Device - Stability
-******************
+Device - Statistics
+********************
 
-Monitor the stability of your hardware setup to ensure reliable readings.
+Inspect scale readings, filtering, state, and current-session statistics to
+diagnose the hardware and change-detection behavior.
 
 .. image:: images/ui_device_stats.png
   :width: 600
   :alt: Statistics
 
-This page helps diagnose unstable builds. Keep the browser open to view historical data (raw, Kalman-filtered, and stable values) for analysis. Data is stored in the browser and resets on refresh.
+This page helps diagnose unstable builds. Keep it open to view the live chart of
+raw, filtered, and stable values; chart history is held in the browser and is
+cleared when the page is refreshed. The statistics API also reports state
+transitions and scale quality metrics.
 
 Device - Events
 ***************
 
-The Events page displays persistent event history when an SD card is mounted.
-Refresh the data and optionally filter it by scale. The current session's most
-recent events are also shown in the statistics view.
+The Events page displays CSV event history when an SD card is mounted. Select a
+scale filter and use **Refresh Data** to load the stored events. The dashboard
+also shows recent events held in memory for the current session; this recent
+list is separate from the SD-card history.
+
+SD logging is available only in firmware builds that enable the card interface.
+The logger writes event records to ``/data.csv``, rotates at roughly 16 KB, and
+keeps up to four files (``data.csv`` through ``data3.csv``). Without a mounted
+card, live monitoring continues but persistent event history is unavailable.
 
 Device - WiFi
 *************
@@ -99,7 +109,10 @@ View and manage beers on tap, with options to import from integrations.
   :width: 600
   :alt: Tap beers
 
-Use buttons to import data from BrewSpy or Brewfather. Beer name, FG, EBC, ABV and IBU are imported if available
+Use the per-tap buttons to import beer details from configured BrewSpy,
+Brewfather, BrewLogger, or BrewGraph integrations. Available fields depend on
+the service response; the app can populate name, FG, EBC, ABV, and IBU where
+provided.
 
 Taps - History
 **************
@@ -110,7 +123,7 @@ Review recent pour history for each tap.
   :width: 600
   :alt: Tap history
 
-Displays the latest pours for beers on tap.
+Displays recent completed pours for each tap from the event history.
 
 Integration - Home Assistant
 ****************************
@@ -122,6 +135,11 @@ Set up MQTT for Home Assistant integration.
   :alt: Home Assistant integration
 
 Configure MQTT server details for data export to Home Assistant.
+KegMon publishes measurement updates and state transitions for configured
+scales. This can include a notification when a scale enters **Pouring**, as
+well as stable-level and fault/recovery state events. Use the matching MQTT
+topics and payloads configured by KegMon when creating Home Assistant sensors
+or automations.
 
 Integration - Brewfather
 ************************
@@ -159,8 +177,23 @@ Enter API keys and monitor names. Obtain the key from Barhelper settings (save i
 Integration - BrewLogger
 ************************
 
-Enter the BrewLogger base URL. Keg state and pour information are sent to that
-endpoint when the integration is configured.
+Enter the BrewLogger base URL. KegMon sends stable volume and pour information
+to the configured service, and can request beer information from the tap beer
+page.
+
+Integration - BrewGraph
+************************
+
+Open **Integrations → BrewGraph** and enter the service base URL plus one token
+for each keg. KegMon sends stable keg-volume and pour updates using the token
+for that scale. The **Taps → Beers** page can also fetch beer name, ABV, IBU,
+and EBC from BrewGraph. The four token fields correspond to the four supported
+scale slots; they do not represent additional features beyond the four
+physical HX711 inputs.
+
+When saving, trailing slashes are removed from the URL; the firmware appends
+its API paths. Keep tokens private. The integration is inactive for a keg if
+its token or the base URL is empty.
 
 Integration - Influx
 ********************

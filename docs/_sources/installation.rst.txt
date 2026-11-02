@@ -58,7 +58,10 @@ After flashing, the device needs WiFi configuration. If previous software was in
 To enter WiFi setup mode on a configured device, use the board reset button
 twice within the configured double-reset window.
 
-If unconfigured, the device creates a wireless access point named `GravityMon` with the default password `password`. Connect to this AP, and the configuration page should open automatically. If not, navigate to **http://192.168.4.1** in your browser.
+If unconfigured, the device creates a wireless access point named ``Kegmon``
+with the default password ``password``. Connect to this AP, and the
+configuration page should open automatically. If not, navigate to
+**http://192.168.4.1** in your browser.
 
 Enter your desired SSID and password. WiFi settings can also be adjusted later under Device > WiFi in the menu.
 

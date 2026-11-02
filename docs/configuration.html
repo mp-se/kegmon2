@@ -278,17 +278,26 @@
 <li><p><strong>STEP 3 - Validate</strong>: Place another object of known weight and verify the reading. If accurate, calibration is complete.</p></li>
 </ul>
 </section>
-<section id="device-stability">
-<h2>Device - Stability<a class="headerlink" href="#device-stability" title="Permalink to this heading">¶</a></h2>
-<p>Monitor the stability of your hardware setup to ensure reliable readings.</p>
+<section id="device-statistics">
+<h2>Device - Statistics<a class="headerlink" href="#device-statistics" title="Permalink to this heading">¶</a></h2>
+<p>Inspect scale readings, filtering, state, and current-session statistics to
+diagnose the hardware and change-detection behavior.</p>
 <a class="reference internal image-reference" href="_images/ui_device_stats.png"><img alt="Statistics" src="_images/ui_device_stats.png" style="width: 600px;" /></a>
-<p>This page helps diagnose unstable builds. Keep the browser open to view historical data (raw, Kalman-filtered, and stable values) for analysis. Data is stored in the browser and resets on refresh.</p>
+<p>This page helps diagnose unstable builds. Keep it open to view the live chart of
+raw, filtered, and stable values; chart history is held in the browser and is
+cleared when the page is refreshed. The statistics API also reports state
+transitions and scale quality metrics.</p>
 </section>
 <section id="device-events">
 <h2>Device - Events<a class="headerlink" href="#device-events" title="Permalink to this heading">¶</a></h2>
-<p>The Events page displays persistent event history when an SD card is mounted.
-Refresh the data and optionally filter it by scale. The current session’s most
-recent events are also shown in the statistics view.</p>
+<p>The Events page displays CSV event history when an SD card is mounted. Select a
+scale filter and use <strong>Refresh Data</strong> to load the stored events. The dashboard
+also shows recent events held in memory for the current session; this recent
+list is separate from the SD-card history.</p>
+<p>SD logging is available only in firmware builds that enable the card interface.
+The logger writes event records to <code class="docutils literal notranslate"><span class="pre">/data.csv</span></code>, rotates at roughly 16 KB, and
+keeps up to four files (<code class="docutils literal notranslate"><span class="pre">data.csv</span></code> through <code class="docutils literal notranslate"><span class="pre">data3.csv</span></code>). Without a mounted
+card, live monitoring continues but persistent event history is unavailable.</p>
 </section>
 <section id="device-wifi">
 <h2>Device - WiFi<a class="headerlink" href="#device-wifi" title="Permalink to this heading">¶</a></h2>
@@ -318,19 +327,27 @@ value when one is available.</p></li>
 <h2>Taps - Beers<a class="headerlink" href="#taps-beers" title="Permalink to this heading">¶</a></h2>
 <p>View and manage beers on tap, with options to import from integrations.</p>
 <a class="reference internal image-reference" href="_images/ui_taps_beer.png"><img alt="Tap beers" src="_images/ui_taps_beer.png" style="width: 600px;" /></a>
-<p>Use buttons to import data from BrewSpy or Brewfather. Beer name, FG, EBC, ABV and IBU are imported if available</p>
+<p>Use the per-tap buttons to import beer details from configured BrewSpy,
+Brewfather, BrewLogger, or BrewGraph integrations. Available fields depend on
+the service response; the app can populate name, FG, EBC, ABV, and IBU where
+provided.</p>
 </section>
 <section id="taps-history">
 <h2>Taps - History<a class="headerlink" href="#taps-history" title="Permalink to this heading">¶</a></h2>
 <p>Review recent pour history for each tap.</p>
 <a class="reference internal image-reference" href="_images/ui_taps_history.png"><img alt="Tap history" src="_images/ui_taps_history.png" style="width: 600px;" /></a>
-<p>Displays the latest pours for beers on tap.</p>
+<p>Displays recent completed pours for each tap from the event history.</p>
 </section>
 <section id="integration-home-assistant">
 <h2>Integration - Home Assistant<a class="headerlink" href="#integration-home-assistant" title="Permalink to this heading">¶</a></h2>
 <p>Set up MQTT for Home Assistant integration.</p>
 <a class="reference internal image-reference" href="_images/ui_post_ha.png"><img alt="Home Assistant integration" src="_images/ui_post_ha.png" style="width: 600px;" /></a>
-<p>Configure MQTT server details for data export to Home Assistant.</p>
+<p>Configure MQTT server details for data export to Home Assistant.
+KegMon publishes measurement updates and state transitions for configured
+scales. This can include a notification when a scale enters <strong>Pouring</strong>, as
+well as stable-level and fault/recovery state events. Use the matching MQTT
+topics and payloads configured by KegMon when creating Home Assistant sensors
+or automations.</p>
 </section>
 <section id="integration-brewfather">
 <h2>Integration - Brewfather<a class="headerlink" href="#integration-brewfather" title="Permalink to this heading">¶</a></h2>
@@ -352,8 +369,21 @@ value when one is available.</p></li>
 </section>
 <section id="integration-brewlogger">
 <h2>Integration - BrewLogger<a class="headerlink" href="#integration-brewlogger" title="Permalink to this heading">¶</a></h2>
-<p>Enter the BrewLogger base URL. Keg state and pour information are sent to that
-endpoint when the integration is configured.</p>
+<p>Enter the BrewLogger base URL. KegMon sends stable volume and pour information
+to the configured service, and can request beer information from the tap beer
+page.</p>
+</section>
+<section id="integration-brewgraph">
+<h2>Integration - BrewGraph<a class="headerlink" href="#integration-brewgraph" title="Permalink to this heading">¶</a></h2>
+<p>Open <strong>Integrations → BrewGraph</strong> and enter the service base URL plus one token
+for each keg. KegMon sends stable keg-volume and pour updates using the token
+for that scale. The <strong>Taps → Beers</strong> page can also fetch beer name, ABV, IBU,
+and EBC from BrewGraph. The four token fields correspond to the four supported
+scale slots; they do not represent additional features beyond the four
+physical HX711 inputs.</p>
+<p>When saving, trailing slashes are removed from the URL; the firmware appends
+its API paths. Keep tokens private. The integration is inactive for a keg if
+its token or the base URL is empty.</p>
 </section>
 <section id="integration-influx">
 <h2>Integration - Influx<a class="headerlink" href="#integration-influx" title="Permalink to this heading">¶</a></h2>
@@ -456,7 +486,7 @@ the page. The device restarts after a successful upload.</p>
 <li><a class="reference internal" href="#index">Index</a></li>
 <li><a class="reference internal" href="#device-settings">Device - Settings</a></li>
 <li><a class="reference internal" href="#device-calibration">Device - Calibration</a></li>
-<li><a class="reference internal" href="#device-stability">Device - Stability</a></li>
+<li><a class="reference internal" href="#device-statistics">Device - Statistics</a></li>
 <li><a class="reference internal" href="#device-events">Device - Events</a></li>
 <li><a class="reference internal" href="#device-wifi">Device - WiFi</a></li>
 <li><a class="reference internal" href="#taps-settings">Taps - Settings</a></li>
@@ -467,6 +497,7 @@ the page. The device restarts after a successful upload.</p>
 <li><a class="reference internal" href="#integration-brewspy">Integration - Brewspy</a></li>
 <li><a class="reference internal" href="#integration-barhelper">Integration - Barhelper</a></li>
 <li><a class="reference internal" href="#integration-brewlogger">Integration - BrewLogger</a></li>
+<li><a class="reference internal" href="#integration-brewgraph">Integration - BrewGraph</a></li>
 <li><a class="reference internal" href="#integration-influx">Integration - Influx</a></li>
 <li><a class="reference internal" href="#serial-console">Serial Console</a></li>
 <li><a class="reference internal" href="#backup-recovery">Backup &amp; Recovery</a></li>
